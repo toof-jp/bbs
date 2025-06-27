@@ -1,0 +1,10 @@
+[package]
+name = "kernel"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+chrono.workspace = true
+shared.workspace = true
+async-trait.workspace = true
+serde.workspace = true
