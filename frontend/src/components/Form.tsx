@@ -1,4 +1,5 @@
 import { useForm, Controller } from "react-hook-form";
+import { useEffect } from "react";
 
 import { FormData } from "../types";
 
@@ -11,9 +12,13 @@ export function Form({
   defaultValues: FormData;
   isSearching: boolean;
 }) {
-  const { control, handleSubmit } = useForm<FormData>({
+  const { control, handleSubmit, reset } = useForm<FormData>({
     defaultValues: defaultValues,
   });
+
+  useEffect(() => {
+    reset(defaultValues);
+  }, [defaultValues, reset]);
 
   return (
     <form
