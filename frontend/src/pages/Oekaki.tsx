@@ -27,6 +27,10 @@ export default function Search() {
 
   const RESULT_LIMIT = 100;
 
+  const handleIdClick = (id: string) => {
+    setFormData(prev => ({ ...prev, id }));
+  };
+
   const handleFormSubmit = async (data: FormData) => {
     setIsSearching(true);
     setCount(null);
@@ -100,6 +104,7 @@ export default function Search() {
               count={count}
               hasMore={hasMore}
               loadMore={loadMore}
+              onIdClick={handleIdClick}
             />
           )}
         </div>
@@ -113,11 +118,13 @@ function Result({
   count,
   loadMore,
   hasMore,
+  onIdClick,
 }: {
   result: Array<ResJson>;
   count: CountJson | null;
   loadMore: () => void;
   hasMore: boolean;
+  onIdClick: (id: string) => void;
 }) {
   const loader = (
     <div key="loader" className="flex justify-center py-4 text-gray-600">
@@ -136,7 +143,7 @@ function Result({
       >
         <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {result.map((res: ResJson) => (
-            <OekakiCard key={res.no} res={res} />
+            <OekakiCard key={res.no} res={res} onIdClick={onIdClick} />
           ))}
         </ul>
       </InfiniteScroll>
@@ -144,7 +151,7 @@ function Result({
   );
 }
 
-function OekakiCard({ res }: { res: ResJson }) {
+function OekakiCard({ res, onIdClick }: { res: ResJson; onIdClick: (id: string) => void }) {
   const imageUrl = `${BASE_URL}/images/${res.oekaki_id}.png`;
 
   return (
@@ -159,7 +166,10 @@ function OekakiCard({ res }: { res: ResJson }) {
       <div className="text-sm text-gray-600 mb-2 p-4">
         <NoLink no={res.no} /> <div className="inline">{res.name_and_trip}</div>{" "}
         <div className="inline">{res.datetime_text}</div>{" "}
-        <div className="inline">ID: {res.id}</div>
+        <div className="inline">ID: <button 
+          onClick={() => onIdClick(res.id)}
+          className="hover:underline text-blue-600 cursor-pointer"
+        >{res.id}</button></div>
         <div
           className="text-gray-800 prose prose-sm max-w-none prose-a:text-blue-500 prose-a:no-underline hover:prose-a:underline"
           dangerouslySetInnerHTML={{ __html: res.main_text_html }}
