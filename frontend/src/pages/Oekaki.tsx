@@ -24,11 +24,16 @@ export default function Search() {
   const [hasMore, setHasMore] = useState<boolean>(false);
   const cursor = useRef<number>(0);
   const [isSearching, setIsSearching] = useState(false);
+  const formRef = useRef<HTMLDivElement>(null);
 
   const RESULT_LIMIT = 100;
 
   const handleIdClick = (id: string) => {
     setFormData(prev => ({ ...prev, id }));
+    // スクロールしてフォームを表示
+    if (formRef.current) {
+      formRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   };
 
   const handleFormSubmit = async (data: FormData) => {
@@ -93,11 +98,13 @@ export default function Search() {
           <h1 className="text-2xl font-bold text-gray-800 mb-4 text-center">
             お絵描きをまとめる機械
           </h1>
-          <Form
-            onSubmit={handleFormSubmit}
-            defaultValues={formData}
-            isSearching={isSearching}
-          />
+          <div ref={formRef}>
+            <Form
+              onSubmit={handleFormSubmit}
+              defaultValues={formData}
+              isSearching={isSearching}
+            />
+          </div>
           {!isSearching && result.length > 0 && (
             <Result
               result={result}
