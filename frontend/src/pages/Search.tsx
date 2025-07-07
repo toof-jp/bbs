@@ -27,6 +27,10 @@ export default function Search() {
 
   const RESULT_LIMIT = 100;
 
+  const handleIdClick = (id: string) => {
+    setFormData(prev => ({ ...prev, id }));
+  };
+
   const handleFormSubmit = async (data: FormData) => {
     setIsSearching(true);
     setCount(null);
@@ -100,6 +104,7 @@ export default function Search() {
               count={count}
               hasMore={hasMore}
               loadMore={loadMore}
+              onIdClick={handleIdClick}
             />
           )}
         </div>
@@ -113,11 +118,13 @@ function Result({
   count,
   loadMore,
   hasMore,
+  onIdClick,
 }: {
   result: Array<ResJson>;
   count: CountJson | null;
   loadMore: () => void;
   hasMore: boolean;
+  onIdClick: (id: string) => void;
 }) {
   const loader = (
     <div key="loader" className="flex justify-center py-4 text-gray-600">
@@ -136,7 +143,7 @@ function Result({
       >
         <ul className="divide-y divide-gray-200">
           {result.map((res: ResJson) => (
-            <Res key={res.no} res={res} />
+            <Res key={res.no} res={res} onIdClick={onIdClick} />
           ))}
         </ul>
       </InfiniteScroll>
@@ -144,13 +151,16 @@ function Result({
   );
 }
 
-function Res({ res }: { res: ResJson }) {
+function Res({ res, onIdClick }: { res: ResJson; onIdClick: (id: string) => void }) {
   return (
     <li className="py-4">
       <div className="text-sm text-gray-600 mb-2">
         <NoLink no={res.no} /> <div className="inline">{res.name_and_trip}</div>{" "}
         <div className="inline">{res.datetime_text}</div>{" "}
-        <div className="inline">ID: {res.id}</div>
+        <div className="inline">ID: <button 
+          onClick={() => onIdClick(res.id)}
+          className="hover:underline text-blue-600 cursor-pointer"
+        >{res.id}</button></div>
       </div>
       <div
         className="text-gray-800 prose prose-sm max-w-none prose-a:text-blue-500 prose-a:no-underline hover:prose-a:underline"
