@@ -24,8 +24,17 @@ export default function Search() {
   const [hasMore, setHasMore] = useState<boolean>(false);
   const cursor = useRef<number>(0);
   const [isSearching, setIsSearching] = useState(false);
+  const formRef = useRef<HTMLDivElement>(null);
 
   const RESULT_LIMIT = 100;
+
+  const handleIdClick = (id: string) => {
+    setFormData(prev => ({ ...prev, id }));
+    // スクロールしてフォームを表示
+    if (formRef.current) {
+      formRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
 
   const handleFormSubmit = async (data: FormData) => {
     setIsSearching(true);
@@ -89,17 +98,20 @@ export default function Search() {
           <h1 className="text-2xl font-bold text-gray-800 mb-4 text-center">
             お絵描きをまとめる機械
           </h1>
-          <Form
-            onSubmit={handleFormSubmit}
-            defaultValues={formData}
-            isSearching={isSearching}
-          />
+          <div ref={formRef}>
+            <Form
+              onSubmit={handleFormSubmit}
+              defaultValues={formData}
+              isSearching={isSearching}
+            />
+          </div>
           {!isSearching && result.length > 0 && (
             <Result
               result={result}
               count={count}
               hasMore={hasMore}
               loadMore={loadMore}
+              onIdClick={handleIdClick}
             />
           )}
         </div>
@@ -113,11 +125,13 @@ function Result({
   count,
   loadMore,
   hasMore,
+  onIdClick,
 }: {
   result: Array<ResJson>;
   count: CountJson | null;
   loadMore: () => void;
   hasMore: boolean;
+  onIdClick: (id: string) => void;
 }) {
   const loader = (
     <div key="loader" className="flex justify-center py-4 text-gray-600">
@@ -136,7 +150,7 @@ function Result({
       >
         <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {result.map((res: ResJson) => (
-            <OekakiCard key={res.no} res={res} />
+            <OekakiCard key={res.no} res={res} onIdClick={onIdClick} />
           ))}
         </ul>
       </InfiniteScroll>
@@ -144,7 +158,7 @@ function Result({
   );
 }
 
-function OekakiCard({ res }: { res: ResJson }) {
+function OekakiCard({ res, onIdClick }: { res: ResJson; onIdClick: (id: string) => void }) {
   const imageUrl = `${BASE_URL}/images/${res.oekaki_id}.png`;
 
   return (
@@ -159,7 +173,10 @@ function OekakiCard({ res }: { res: ResJson }) {
       <div className="text-sm text-gray-600 mb-2 p-4">
         <NoLink no={res.no} /> <div className="inline">{res.name_and_trip}</div>{" "}
         <div className="inline">{res.datetime_text}</div>{" "}
-        <div className="inline">ID: {res.id}</div>
+        <div className="inline">ID: <button 
+          onClick={() => onIdClick(res.id)}
+          className="hover:underline text-blue-600 cursor-pointer"
+        >{res.id}</button></div>
         <div
           className="text-gray-800 prose prose-sm max-w-none prose-a:text-blue-500 prose-a:no-underline hover:prose-a:underline"
           dangerouslySetInnerHTML={{ __html: res.main_text_html }}
