@@ -92,7 +92,7 @@ impl EventHandler for Bot {
 
                         // Check if adding this post would exceed Discord's limit
                         if !current_message.is_empty()
-                            && current_message.len() + post_text.len() > 1800
+                            && current_message.chars().count() + post_text.chars().count() > 1800
                         {
                             // Send the current batch
                             if let Err(e) = msg.reply(&ctx.http, &current_message).await {
