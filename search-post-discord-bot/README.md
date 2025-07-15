@@ -33,6 +33,7 @@ Discordでボットをメンションして検索クエリを送信します：
 - `until:2024-12-31` - 終了日指定（YYYY-MM-DD形式）
 - `ascending:true` - 昇順で表示（デフォルトは降順）
 - `limit:10` - 表示件数指定（デフォルトは環境変数DEFAULT_LIMITの値）
+- `count:true` - 検索結果の総件数とユニークID数を表示
 
 ### 使用例
 
@@ -40,6 +41,7 @@ Discordでボットをメンションして検索クエリを送信します：
 @search-bot id:abc123 本文検索ワード
 @search-bot name_and_trip:太郎 oekaki:true
 @search-bot since:2024-01-01 until:2024-12-31 limit:20
+@search-bot count:true 検索ワード
 ```
 
 ## セットアップ

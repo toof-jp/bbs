@@ -54,6 +54,7 @@ pub struct SearchQuery {
     pub until: Option<String>,
     pub ascending: Option<bool>,
     pub limit: Option<usize>,
+    pub count: Option<bool>,
 }
 
 impl std::fmt::Display for SearchResponse {
@@ -76,6 +77,7 @@ pub fn parse_search_query(input: &str) -> SearchQuery {
         until: None,
         ascending: None,
         limit: None,
+        count: None,
     };
 
     let mut remaining_text = Vec::new();
@@ -111,6 +113,9 @@ pub fn parse_search_query(input: &str) -> SearchQuery {
                 "limit" => {
                     query.limit = value.parse::<usize>().ok();
                 }
+                "count" => {
+                    query.count = value.parse::<bool>().ok();
+                }
                 _ => {
                     remaining_text.push(part);
                 }
@@ -125,8 +130,8 @@ pub fn parse_search_query(input: &str) -> SearchQuery {
         query.main_text = Some(remaining_text.join(" "));
     }
 
-    debug!("Parsed search query: id={:?}, main_text={:?}, name_and_trip={:?}, oekaki={:?}, since={:?}, until={:?}, ascending={:?}, limit={:?}",
-        query.id, query.main_text, query.name_and_trip, query.oekaki, query.since, query.until, query.ascending, query.limit);
+    debug!("Parsed search query: id={:?}, main_text={:?}, name_and_trip={:?}, oekaki={:?}, since={:?}, until={:?}, ascending={:?}, limit={:?}, count={:?}",
+        query.id, query.main_text, query.name_and_trip, query.oekaki, query.since, query.until, query.ascending, query.limit, query.count);
 
     query
 }
@@ -255,5 +260,16 @@ mod tests {
         assert_eq!(query.main_text, Some("just some search text".to_string()));
         assert_eq!(query.id, None);
         assert_eq!(query.limit, None);
+    }
+
+    #[test]
+    fn test_parse_search_query_count() {
+        let query = parse_search_query("count:true test search");
+        assert_eq!(query.count, Some(true));
+        assert_eq!(query.main_text, Some("test search".to_string()));
+
+        let query = parse_search_query("count:false");
+        assert_eq!(query.count, Some(false));
+        assert_eq!(query.main_text, None);
     }
 }

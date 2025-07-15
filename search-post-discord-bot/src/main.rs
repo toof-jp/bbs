@@ -33,7 +33,7 @@ impl EventHandler for Bot {
             if let Err(e) = msg
                 .reply(
                     &ctx.http,
-                    "使い方: @search 検索文字列\n例:\n- @search id:abc123\n- @search id:abc123 検索ワード\n- @search name_and_trip:名前\n- @search oekaki:true\n- @search since:2024-01-01 until:2024-12-31\n- @search limit:10 検索ワード",
+                    "使い方: @search 検索文字列\n例:\n- @search id:abc123\n- @search id:abc123 検索ワード\n- @search name_and_trip:名前\n- @search oekaki:true\n- @search since:2024-01-01 until:2024-12-31\n- @search limit:10 検索ワード\n- @search count:true 検索ワード",
                 )
                 .await
             {
@@ -46,16 +46,19 @@ impl EventHandler for Bot {
         let query = parse_search_query(&cleaned_content);
         debug!("Parsed query from input: '{cleaned_content}'");
 
-        // First, get the count
-        let count_result =
-            count_posts(&self.api_base_url, parse_search_query(&cleaned_content)).await;
+        // Only get count if count:true is specified
+        let count_result = if query.count == Some(true) {
+            Some(count_posts(&self.api_base_url, parse_search_query(&cleaned_content)).await)
+        } else {
+            None
+        };
 
         match search_posts(&self.api_base_url, query, self.default_limit).await {
             Ok(posts) => {
                 if posts.is_empty() {
                     let mut message = "検索結果が見つかりませんでした。".to_string();
 
-                    if let Ok(count) = count_result {
+                    if let Some(Ok(count)) = count_result {
                         if count.total_res_count > 0 {
                             message = format!(
                                 "検索結果が見つかりませんでした。\n（該当件数: {}件、ユニークID数: {}）",
@@ -68,8 +71,8 @@ impl EventHandler for Bot {
                         error!("Error sending message: {e:?}");
                     }
                 } else {
-                    // Send count information first
-                    if let Ok(count) = count_result {
+                    // Send count information first if count:true was specified
+                    if let Some(Ok(count)) = count_result {
                         let count_message = format!(
                             "検索結果: {}件（表示: {}件）、ユニークID数: {}",
                             count.total_res_count,
