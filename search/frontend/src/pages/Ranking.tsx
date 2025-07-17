@@ -22,7 +22,7 @@ export default function Ranking() {
   const formRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    fetchRanking();
+    fetchRanking(formData);
   }, []);
 
   const fetchRanking = async (params: Partial<RankingFormData> = {}) => {
@@ -30,11 +30,11 @@ export default function Ranking() {
     setError(null);
     try {
       const response = await getRanking({
-        id: params.id || formData.id || undefined,
-        main_text: params.main_text || formData.main_text || undefined,
-        name_and_trip: params.name_and_trip || formData.name_and_trip || undefined,
-        since: params.since || formData.since || undefined,
-        until: params.until || formData.until || undefined,
+        id: params.id || undefined,
+        main_text: params.main_text || undefined,
+        name_and_trip: params.name_and_trip || undefined,
+        since: params.since || undefined,
+        until: params.until || undefined,
       });
       setRanking(response.ranking);
       setTotalUniqueIds(response.total_unique_ids);
