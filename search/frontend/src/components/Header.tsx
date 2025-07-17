@@ -36,7 +36,7 @@ export function Header() {
                 to="/ranking"
                 className={getLinkClassName("/ranking")}
               >
-                ランキング
+                IDランキング
               </Link>
             </div>
           </div>
