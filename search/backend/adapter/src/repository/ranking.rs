@@ -28,6 +28,7 @@ impl RankingRepository for RankingRepositoryImpl {
                     MIN(datetime) as first_post_datetime
                 FROM res
                 WHERE id IS NOT NULL AND id != ''
+                AND datetime != '1970-01-01 00:00:00'::timestamp
         "#.to_string();
 
         // Build dynamic WHERE conditions
@@ -125,6 +126,7 @@ impl RankingRepository for RankingRepositoryImpl {
             SELECT COUNT(*) as count
             FROM res
             WHERE id IS NOT NULL AND id != ''
+            AND datetime != '1970-01-01 00:00:00'::timestamp
         "#.to_string();
 
         if !where_conditions.is_empty() {
