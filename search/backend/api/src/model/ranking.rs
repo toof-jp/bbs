@@ -1,9 +1,35 @@
 use chrono::{DateTime, NaiveDate, Utc};
 use kernel::model::ranking::{
-    DateTimeRange, RankingData, RankingEntry, RankingOptions, RankingSearchConditions, RankingType,
+    DateTimeRange, RankingData, RankingEntry, RankingOptions, RankingSearchConditions,
+    RankingType as KernelRankingType,
 };
 use serde::{Deserialize, Deserializer, Serialize};
 use shared::error::{AppError, AppResult};
+
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(rename_all = "snake_case")]
+pub enum RankingType {
+    PostCount,
+    RecentActivity,
+}
+
+impl From<RankingType> for KernelRankingType {
+    fn from(ranking_type: RankingType) -> Self {
+        match ranking_type {
+            RankingType::PostCount => KernelRankingType::PostCount,
+            RankingType::RecentActivity => KernelRankingType::RecentActivity,
+        }
+    }
+}
+
+impl From<KernelRankingType> for RankingType {
+    fn from(ranking_type: KernelRankingType) -> Self {
+        match ranking_type {
+            KernelRankingType::PostCount => RankingType::PostCount,
+            KernelRankingType::RecentActivity => RankingType::RecentActivity,
+        }
+    }
+}
 
 #[derive(Debug, Deserialize)]
 pub struct RankingRequest {
@@ -43,31 +69,6 @@ where
     }
 }
 
-impl<'de> Deserialize<'de> for RankingType {
-    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-    where
-        D: Deserializer<'de>,
-    {
-        let s = String::deserialize(deserializer)?;
-        match s.as_str() {
-            "post_count" => Ok(RankingType::PostCount),
-            "recent_activity" => Ok(RankingType::RecentActivity),
-            _ => Err(serde::de::Error::custom("Invalid ranking type")),
-        }
-    }
-}
-
-impl Serialize for RankingType {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-    where
-        S: serde::Serializer,
-    {
-        match self {
-            RankingType::PostCount => serializer.serialize_str("post_count"),
-            RankingType::RecentActivity => serializer.serialize_str("recent_activity"),
-        }
-    }
-}
 
 impl TryFrom<RankingRequest> for RankingOptions {
     type Error = AppError;
@@ -101,7 +102,7 @@ impl TryFrom<RankingRequest> for RankingOptions {
             name_and_trip: req.name_and_trip,
             oekaki: req.oekaki,
             date_range,
-            ranking_type: req.ranking_type,
+            ranking_type: req.ranking_type.into(),
             min_posts: req.min_posts,
         })
     }
