@@ -120,6 +120,27 @@ impl RankingRepository for RankingRepositoryImpl {
             .map(|row| row.into_ranking_entry())
             .collect();
 
+        // Get total res count with the same search conditions
+        let mut count_query = r#"
+            SELECT COUNT(*) as count
+            FROM res
+            WHERE id IS NOT NULL AND id != ''
+        "#.to_string();
+
+        if !where_conditions.is_empty() {
+            count_query.push_str(&format!(" AND {}", where_conditions.join(" AND ")));
+        }
+
+        let mut count_sql_query = sqlx::query_scalar::<_, i64>(&count_query);
+        
+        // Bind values in order for count query
+        for value in &bind_values {
+            count_sql_query = count_sql_query.bind(value);
+        }
+
+        let total_res_count = count_sql_query.fetch_one(self.db.inner_ref()).await
+            .map_err(AppError::SpecificOperationError)?;
+
         let search_conditions = RankingSearchConditions {
             id: options.id.clone(),
             main_text: options.main_text.clone(),
@@ -132,6 +153,7 @@ impl RankingRepository for RankingRepositoryImpl {
         Ok(RankingData {
             ranking,
             total_unique_ids,
+            total_res_count,
             search_conditions,
         })
     }

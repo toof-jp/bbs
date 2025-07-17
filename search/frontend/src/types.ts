@@ -38,6 +38,7 @@ export interface RankingItem {
 export interface RankingResponse {
   ranking: RankingItem[];
   total_unique_ids: number;
+  total_res_count: number;
   search_conditions: {
     id?: string;
     main_text?: string;

@@ -1,21 +1,21 @@
 import { useState, useEffect, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Form } from '../components/Form';
+import { RankingForm, RankingFormData } from '../components/RankingForm';
 import { Header } from '../components/Header';
 import { getRanking } from '../utils/Fetch';
-import { RankingItem, FormData } from '../types';
+import { RankingItem } from '../types';
 
 export default function Ranking() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [ranking, setRanking] = useState<RankingItem[]>([]);
   const [totalUniqueIds, setTotalUniqueIds] = useState(0);
+  const [totalResCount, setTotalResCount] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [formData, setFormData] = useState<FormData>(() => ({
+  const [formData, setFormData] = useState<RankingFormData>(() => ({
     id: searchParams.get("id") || "",
     main_text: searchParams.get("main_text") || "",
     name_and_trip: searchParams.get("name_and_trip") || "",
-    ascending: false,
     since: searchParams.get("since") || "",
     until: searchParams.get("until") || "",
   }));
@@ -25,7 +25,7 @@ export default function Ranking() {
     fetchRanking();
   }, []);
 
-  const fetchRanking = async (params: Partial<FormData> = {}) => {
+  const fetchRanking = async (params: Partial<RankingFormData> = {}) => {
     setLoading(true);
     setError(null);
     try {
@@ -38,6 +38,7 @@ export default function Ranking() {
       });
       setRanking(response.ranking);
       setTotalUniqueIds(response.total_unique_ids);
+      setTotalResCount(response.total_res_count);
     } catch (error) {
       console.error('Failed to fetch ranking:', error);
       setError('ランキングの取得に失敗しました');
@@ -46,7 +47,7 @@ export default function Ranking() {
     }
   };
 
-  const handleFormSubmit = async (data: FormData) => {
+  const handleFormSubmit = async (data: RankingFormData) => {
     setFormData(data);
     setSearchParams({
       id: data.id,
@@ -85,12 +86,12 @@ export default function Ranking() {
       
       <div ref={formRef} className="mb-8">
         <h1 className="text-2xl font-bold mb-4">IDランキング</h1>
-        <Form onSubmit={handleFormSubmit} defaultValues={formData} isSearching={loading} />
+        <RankingForm onSubmit={handleFormSubmit} defaultValues={formData} isSearching={loading} />
       </div>
       
-      {totalUniqueIds > 0 && (
+      {(totalUniqueIds > 0 || totalResCount > 0) && (
         <div className="mb-4 text-gray-700">
-          <p>ユニークID数: {totalUniqueIds.toLocaleString()}</p>
+          <p>検索結果: {totalResCount.toLocaleString()}件 (書き込みID数: {totalUniqueIds.toLocaleString()}件)</p>
         </div>
       )}
 

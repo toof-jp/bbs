@@ -27,6 +27,7 @@ pub enum RankingType {
 pub struct RankingData {
     pub ranking: Vec<RankingEntry>,
     pub total_unique_ids: i64,
+    pub total_res_count: i64,
     pub search_conditions: RankingSearchConditions,
 }
 

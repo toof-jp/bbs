@@ -112,6 +112,7 @@ impl TryFrom<RankingRequest> for RankingOptions {
 pub struct RankingResponse {
     pub ranking: Vec<RankingItem>,
     pub total_unique_ids: i64,
+    pub total_res_count: i64,
     pub search_conditions: SearchConditions,
 }
 
@@ -156,6 +157,7 @@ impl From<RankingData> for RankingResponse {
         RankingResponse {
             ranking,
             total_unique_ids: data.total_unique_ids,
+            total_res_count: data.total_res_count,
             search_conditions,
         }
     }
