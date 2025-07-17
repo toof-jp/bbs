@@ -1,6 +1,6 @@
 use chrono::{DateTime, NaiveDate, Utc};
 use kernel::model::ranking::{
-    DateTimeRange, RankingData, RankingEntry, RankingOptions, RankingSearchConditions,
+    DateTimeRange, RankingData, RankingEntry, RankingOptions,
     RankingType as KernelRankingType,
 };
 use serde::{Deserialize, Deserializer, Serialize};
