@@ -49,13 +49,14 @@ export default function Ranking() {
 
   const handleFormSubmit = async (data: RankingFormData) => {
     setFormData(data);
-    setSearchParams({
-      id: data.id,
-      main_text: data.main_text,
-      name_and_trip: data.name_and_trip,
-      since: data.since,
-      until: data.until,
-    });
+    // 空文字列の値を除外してURLパラメータを設定
+    const params: Record<string, string> = {};
+    if (data.id) params.id = data.id;
+    if (data.main_text) params.main_text = data.main_text;
+    if (data.name_and_trip) params.name_and_trip = data.name_and_trip;
+    if (data.since) params.since = data.since;
+    if (data.until) params.until = data.until;
+    setSearchParams(params);
     await fetchRanking(data);
   };
 

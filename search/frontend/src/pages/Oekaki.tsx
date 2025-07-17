@@ -40,14 +40,15 @@ export default function Search() {
     setIsSearching(true);
     setCount(null);
     setFormData(data);
-    setSearchParams({
-      id: data.id,
-      main_text: data.main_text,
-      name_and_trip: data.name_and_trip,
-      ascending: data.ascending.toString(),
-      since: data.since,
-      until: data.until,
-    });
+    // 空文字列の値を除外してURLパラメータを設定
+    const params: Record<string, string> = {};
+    if (data.id) params.id = data.id;
+    if (data.main_text) params.main_text = data.main_text;
+    if (data.name_and_trip) params.name_and_trip = data.name_and_trip;
+    params.ascending = data.ascending.toString(); // ascendingは常に設定
+    if (data.since) params.since = data.since;
+    if (data.until) params.until = data.until;
+    setSearchParams(params);
 
     if (data.ascending) {
       cursor.current = 0;
