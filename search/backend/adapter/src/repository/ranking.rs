@@ -22,13 +22,12 @@ impl RankingRepository for RankingRepositoryImpl {
                 SELECT 
                     id,
                     COUNT(*) as post_count,
-                    MAX(no) as latest_post_no,
-                    MAX(datetime) as latest_post_datetime,
-                    MIN(no) as first_post_no,
-                    MIN(datetime) as first_post_datetime
+                    MAX(CASE WHEN datetime != '1970-01-01 00:00:00'::timestamp THEN no END) as latest_post_no,
+                    MAX(CASE WHEN datetime != '1970-01-01 00:00:00'::timestamp THEN datetime END) as latest_post_datetime,
+                    MIN(CASE WHEN datetime != '1970-01-01 00:00:00'::timestamp THEN no END) as first_post_no,
+                    MIN(CASE WHEN datetime != '1970-01-01 00:00:00'::timestamp THEN datetime END) as first_post_datetime
                 FROM res
                 WHERE id IS NOT NULL AND id != ''
-                AND datetime != '1970-01-01 00:00:00'::timestamp
         "#.to_string();
 
         // Build dynamic WHERE conditions
@@ -79,6 +78,7 @@ impl RankingRepository for RankingRepositoryImpl {
             r#"
                 GROUP BY id
                 HAVING COUNT(*) >= ${}
+                AND MAX(CASE WHEN datetime != '1970-01-01 00:00:00'::timestamp THEN datetime END) IS NOT NULL
             )
             SELECT 
                 ROW_NUMBER() OVER (ORDER BY {} DESC) as rank,
@@ -126,7 +126,6 @@ impl RankingRepository for RankingRepositoryImpl {
             SELECT COUNT(*) as count
             FROM res
             WHERE id IS NOT NULL AND id != ''
-            AND datetime != '1970-01-01 00:00:00'::timestamp
         "#.to_string();
 
         if !where_conditions.is_empty() {
