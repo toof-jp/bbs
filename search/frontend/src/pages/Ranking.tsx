@@ -3,7 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import { Form } from '../components/Form';
 import { Header } from '../components/Header';
 import { getRanking } from '../utils/Fetch';
-import { RankingItem, RankingResponse, FormData } from '../types';
+import { RankingItem, FormData } from '../types';
 
 export default function Ranking() {
   const [searchParams, setSearchParams] = useSearchParams();
