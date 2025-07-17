@@ -99,6 +99,80 @@ GET /api/v1/search/count
 | total_res_count | integer | 総投稿数 |
 | unique_id_count | integer | ユニークID数 |
 
+### 3. IDランキング
+
+IDごとの投稿数ランキングを返します。
+
+```
+GET /api/v1/ranking
+```
+
+#### パラメータ
+
+| パラメータ | 型 | 必須 | デフォルト | 説明 |
+|-----------|---|------|-----------|------|
+| id | string | × | null | 投稿者のID（部分一致） |
+| main_text | string | × | null | 投稿本文のキーワード（部分一致） |
+| name_and_trip | string | × | null | 投稿者の名前とトリップ（部分一致） |
+| oekaki | boolean | × | null | お絵描き投稿のフィルタ |
+| since | string | × | null | 開始日 (YYYY-MM-DD形式) |
+| until | string | × | null | 終了日 (YYYY-MM-DD形式) |
+| ranking_type | string | × | "post_count" | ランキングタイプ ("post_count" または "recent_activity") |
+| min_posts | integer | × | 1 | 最小投稿数フィルタ |
+
+#### レスポンス
+
+成功時: 200 OK
+
+```json
+{
+  "ranking": [
+    {
+      "rank": 1,
+      "id": "abc123",
+      "post_count": 1234,
+      "latest_post_no": 56789,
+      "latest_post_datetime": "2024-12-31T23:59:59Z",
+      "first_post_no": 100,
+      "first_post_datetime": "2024-01-01T00:00:00Z"
+    },
+    {
+      "rank": 2,
+      "id": "def456",
+      "post_count": 987,
+      "latest_post_no": 56788,
+      "latest_post_datetime": "2024-12-31T23:30:00Z",
+      "first_post_no": 200,
+      "first_post_datetime": "2024-01-02T00:00:00Z"
+    }
+  ],
+  "total_unique_ids": 567,
+  "search_conditions": {
+    "id": null,
+    "main_text": null,
+    "name_and_trip": null,
+    "oekaki": null,
+    "since": null,
+    "until": null
+  }
+}
+```
+
+#### レスポンスフィールド
+
+| フィールド | 型 | 説明 |
+|-----------|---|------|
+| ranking | array | ランキング項目の配列 |
+| ranking[].rank | integer | 順位 |
+| ranking[].id | string | 投稿者ID |
+| ranking[].post_count | integer | 投稿数 |
+| ranking[].latest_post_no | integer | 最新投稿番号 |
+| ranking[].latest_post_datetime | string | 最新投稿日時 (ISO 8601形式) |
+| ranking[].first_post_no | integer | 最初の投稿番号 |
+| ranking[].first_post_datetime | string | 最初の投稿日時 (ISO 8601形式) |
+| total_unique_ids | integer | 条件に一致するユニークID総数 |
+| search_conditions | object | 適用された検索条件 |
+
 ## エラーレスポンス
 
 エラー時は適切なHTTPステータスコードとエラーメッセージが返されます。
@@ -133,4 +207,28 @@ curl "http://localhost:3000/api/v1/search?oekaki=true"
 
 ```bash
 curl "http://localhost:3000/api/v1/search?ascending=true"
+```
+
+### IDランキングの取得
+
+```bash
+curl "http://localhost:3000/api/v1/ranking"
+```
+
+### 検索条件付きランキング
+
+```bash
+curl "http://localhost:3000/api/v1/ranking?main_text=キーワード&since=2024-01-01"
+```
+
+### 最近の活動順ランキング
+
+```bash
+curl "http://localhost:3000/api/v1/ranking?ranking_type=recent_activity"
+```
+
+### 最小投稿数を指定したランキング
+
+```bash
+curl "http://localhost:3000/api/v1/ranking?min_posts=10"
 ```
