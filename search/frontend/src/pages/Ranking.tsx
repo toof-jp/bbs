@@ -126,7 +126,7 @@ export default function Ranking() {
                       投稿数
                     </th>
                     <th className="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
-                      最新投稿
+                      最後の投稿
                     </th>
                     <th className="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
                       最初の投稿
