@@ -21,7 +21,7 @@ lazy_static = "1.4.0"
 markup5ever = "0.11.0"
 niconico = "0.2.0"
 regex = "1.9.3"
-reqwest = { version = "0.12", features = ["json", "cookies", "stream"] }
+reqwest = { version = "0.12", features = ["json", "cookies", "stream", "rustls-tls"] }
 scraper = "0.12.0"
 secrecy = "0.10.3"
 select = "0.6.0"
