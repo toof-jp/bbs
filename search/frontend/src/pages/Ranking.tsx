@@ -36,9 +36,9 @@ export default function Ranking() {
         since: params.since || undefined,
         until: params.until || undefined,
       });
-      setRanking(response.ranking);
-      setTotalUniqueIds(response.total_unique_ids);
-      setTotalResCount(response.total_res_count);
+      setRanking(response.ranking || []);
+      setTotalUniqueIds(response.total_unique_ids || 0);
+      setTotalResCount(response.total_res_count || 0);
     } catch (error) {
       console.error('Failed to fetch ranking:', error);
       setError('ランキングの取得に失敗しました');
@@ -96,7 +96,7 @@ export default function Ranking() {
           
           {(totalUniqueIds > 0 || totalResCount > 0) && (
             <div className="mb-4 text-gray-700">
-              <p>検索結果: {totalResCount.toLocaleString()}件 (書き込みID数: {totalUniqueIds.toLocaleString()}件)</p>
+              <p>検索結果: {totalResCount?.toLocaleString() || '0'}件 (書き込みID数: {totalUniqueIds?.toLocaleString() || '0'}件)</p>
             </div>
           )}
 
@@ -148,7 +148,7 @@ export default function Ranking() {
                         </button>
                       </td>
                       <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900 text-right">
-                        {item.post_count.toLocaleString()}
+                        {item.post_count?.toLocaleString() || '0'}
                       </td>
                       <td className="px-4 py-3 whitespace-nowrap">
                         <div className="text-sm">
