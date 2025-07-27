@@ -1,4 +1,7 @@
-resource "aws_s3_bucket" "oekaki_images" {
+# Alternative: Private S3 bucket with CloudFront distribution
+# This approach is more secure and doesn't require disabling block public access
+
+resource "aws_s3_bucket" "oekaki_images_private" {
   bucket = var.bucket_name
 
   tags = {
@@ -8,8 +11,8 @@ resource "aws_s3_bucket" "oekaki_images" {
 }
 
 # Keep the bucket private
-resource "aws_s3_bucket_public_access_block" "oekaki_images" {
-  bucket = aws_s3_bucket.oekaki_images.id
+resource "aws_s3_bucket_public_access_block" "oekaki_images_private" {
+  bucket = aws_s3_bucket.oekaki_images_private.id
 
   block_public_acls       = true
   block_public_policy     = true
@@ -23,8 +26,8 @@ resource "aws_cloudfront_origin_access_identity" "oekaki_oai" {
 }
 
 # Bucket policy for CloudFront access only
-resource "aws_s3_bucket_policy" "oekaki_images" {
-  bucket = aws_s3_bucket.oekaki_images.id
+resource "aws_s3_bucket_policy" "oekaki_images_private" {
+  bucket = aws_s3_bucket.oekaki_images_private.id
 
   policy = jsonencode({
     Version = "2012-10-17"
@@ -36,14 +39,10 @@ resource "aws_s3_bucket_policy" "oekaki_images" {
           AWS = aws_cloudfront_origin_access_identity.oekaki_oai.iam_arn
         }
         Action   = "s3:GetObject"
-        Resource = "${aws_s3_bucket.oekaki_images.arn}/*"
+        Resource = "${aws_s3_bucket.oekaki_images_private.arn}/*"
       }
     ]
   })
-
-  depends_on = [
-    aws_s3_bucket_public_access_block.oekaki_images
-  ]
 }
 
 # CloudFront distribution
@@ -51,11 +50,10 @@ resource "aws_cloudfront_distribution" "oekaki_cdn" {
   enabled             = true
   is_ipv6_enabled     = true
   default_root_object = ""
-  comment             = "CDN for oekaki images"
 
   origin {
-    domain_name = aws_s3_bucket.oekaki_images.bucket_regional_domain_name
-    origin_id   = "S3-${aws_s3_bucket.oekaki_images.id}"
+    domain_name = aws_s3_bucket.oekaki_images_private.bucket_regional_domain_name
+    origin_id   = "S3-${aws_s3_bucket.oekaki_images_private.id}"
 
     s3_origin_config {
       origin_access_identity = aws_cloudfront_origin_access_identity.oekaki_oai.cloudfront_access_identity_path
@@ -65,7 +63,7 @@ resource "aws_cloudfront_distribution" "oekaki_cdn" {
   default_cache_behavior {
     allowed_methods  = ["GET", "HEAD", "OPTIONS"]
     cached_methods   = ["GET", "HEAD"]
-    target_origin_id = "S3-${aws_s3_bucket.oekaki_images.id}"
+    target_origin_id = "S3-${aws_s3_bucket.oekaki_images_private.id}"
 
     forwarded_values {
       query_string = false
@@ -78,7 +76,6 @@ resource "aws_cloudfront_distribution" "oekaki_cdn" {
     min_ttl                = 0
     default_ttl            = 86400
     max_ttl                = 31536000
-    compress               = true
   }
 
   restrictions {
@@ -97,15 +94,7 @@ resource "aws_cloudfront_distribution" "oekaki_cdn" {
   }
 }
 
-# CORS configuration for the bucket
-resource "aws_s3_bucket_cors_configuration" "oekaki_images" {
-  bucket = aws_s3_bucket.oekaki_images.id
-
-  cors_rule {
-    allowed_headers = ["*"]
-    allowed_methods = ["GET", "HEAD"]
-    allowed_origins = ["*"]
-    expose_headers  = []
-    max_age_seconds = 3000
-  }
+output "cloudfront_domain_name" {
+  description = "CloudFront distribution domain name"
+  value       = aws_cloudfront_distribution.oekaki_cdn.domain_name
 }
