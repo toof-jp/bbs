@@ -3,7 +3,7 @@ import InfiniteScroll from "react-infinite-scroller";
 import { useSearchParams } from "react-router-dom";
 
 import { ResJson, CountJson, FormData } from "../types";
-import { fetchData, BASE_URL } from "../utils/Fetch";
+import { fetchData, getImageUrl } from "../utils/Fetch";
 import { Form } from "../components/Form";
 import { Count } from "../components/Count";
 import { NoLink } from "../components/NoLink";
@@ -180,7 +180,7 @@ function Res({ res, onIdClick }: { res: ResJson; onIdClick: (id: string) => void
 }
 
 function Oekaki({ res }: { res: ResJson }) {
-  const imageUrl = `${BASE_URL}/images/${res.oekaki_id}.png`;
+  const imageUrl = getImageUrl(res.oekaki_id!);
   return (
     <div className="mt-2 prose prose-sm">
       <img src={imageUrl} alt={res.oekaki_title} className="max-w-full" />

@@ -1,0 +1,111 @@
+resource "aws_s3_bucket" "oekaki_images" {
+  bucket = var.bucket_name
+
+  tags = {
+    Name        = "Oekaki Images"
+    Environment = var.environment
+  }
+}
+
+# Keep the bucket private
+resource "aws_s3_bucket_public_access_block" "oekaki_images" {
+  bucket = aws_s3_bucket.oekaki_images.id
+
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+}
+
+# CloudFront Origin Access Identity
+resource "aws_cloudfront_origin_access_identity" "oekaki_oai" {
+  comment = "OAI for oekaki images"
+}
+
+# Bucket policy for CloudFront access only
+resource "aws_s3_bucket_policy" "oekaki_images" {
+  bucket = aws_s3_bucket.oekaki_images.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Sid    = "AllowCloudFrontServicePrincipal"
+        Effect = "Allow"
+        Principal = {
+          AWS = aws_cloudfront_origin_access_identity.oekaki_oai.iam_arn
+        }
+        Action   = "s3:GetObject"
+        Resource = "${aws_s3_bucket.oekaki_images.arn}/*"
+      }
+    ]
+  })
+
+  depends_on = [
+    aws_s3_bucket_public_access_block.oekaki_images
+  ]
+}
+
+# CloudFront distribution
+resource "aws_cloudfront_distribution" "oekaki_cdn" {
+  enabled             = true
+  is_ipv6_enabled     = true
+  default_root_object = ""
+  comment             = "CDN for oekaki images"
+
+  origin {
+    domain_name = aws_s3_bucket.oekaki_images.bucket_regional_domain_name
+    origin_id   = "S3-${aws_s3_bucket.oekaki_images.id}"
+
+    s3_origin_config {
+      origin_access_identity = aws_cloudfront_origin_access_identity.oekaki_oai.cloudfront_access_identity_path
+    }
+  }
+
+  default_cache_behavior {
+    allowed_methods  = ["GET", "HEAD", "OPTIONS"]
+    cached_methods   = ["GET", "HEAD"]
+    target_origin_id = "S3-${aws_s3_bucket.oekaki_images.id}"
+
+    forwarded_values {
+      query_string = false
+      cookies {
+        forward = "none"
+      }
+    }
+
+    viewer_protocol_policy = "redirect-to-https"
+    min_ttl                = 0
+    default_ttl            = 86400
+    max_ttl                = 31536000
+    compress               = true
+  }
+
+  restrictions {
+    geo_restriction {
+      restriction_type = "none"
+    }
+  }
+
+  viewer_certificate {
+    cloudfront_default_certificate = true
+  }
+
+  tags = {
+    Name        = "Oekaki Images CDN"
+    Environment = var.environment
+  }
+}
+
+# CORS configuration for the bucket
+resource "aws_s3_bucket_cors_configuration" "oekaki_images" {
+  bucket = aws_s3_bucket.oekaki_images.id
+
+  cors_rule {
+    allowed_headers = ["*"]
+    allowed_methods = ["GET", "HEAD"]
+    allowed_origins = ["*"]
+    expose_headers  = []
+    max_age_seconds = 3000
+  }
+}
