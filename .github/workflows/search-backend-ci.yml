@@ -5,6 +5,7 @@ on:
     branches: [ main ]
     paths:
       - search/backend/**
+      - .github/workflows/search-backend-ci.yml
 
 permissions:
   contents: read
