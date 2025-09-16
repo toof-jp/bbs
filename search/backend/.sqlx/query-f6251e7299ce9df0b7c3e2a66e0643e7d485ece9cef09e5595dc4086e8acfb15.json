@@ -1,0 +1,33 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n                SELECT\n                COUNT(*) AS \"total_res_count!\",\n                COUNT(DISTINCT r.id) AS \"unique_id_count!\"\n                FROM res r\n                LEFT OUTER JOIN oekaki USING (oekaki_id)\n                WHERE r.id LIKE $1 || '%'\n                AND r.name_and_trip LIKE '%' || $2 || '%'\n                AND r.main_text LIKE '%' || $3 || '%'\n                AND r.datetime BETWEEN $4 AND $5\n                AND ($6 = false OR r.oekaki_id IS NOT NULL);\n            ",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "total_res_count!",
+        "type_info": "Int8"
+      },
+      {
+        "ordinal": 1,
+        "name": "unique_id_count!",
+        "type_info": "Int8"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Text",
+        "Text",
+        "Text",
+        "Timestamp",
+        "Timestamp",
+        "Bool"
+      ]
+    },
+    "nullable": [
+      null,
+      null
+    ]
+  },
+  "hash": "f6251e7299ce9df0b7c3e2a66e0643e7d485ece9cef09e5595dc4086e8acfb15"
+}
