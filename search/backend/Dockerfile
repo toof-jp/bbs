@@ -16,4 +16,4 @@ FROM debian:bookworm-slim
 WORKDIR /search/backend
 COPY --from=builder ./search/backend/target/release/bbs-search-backend ./target/release/bbs-search-backend
 USER 1000
-ENTRYPOINT ["./target/release/renderer-rust"]
+ENTRYPOINT ["./target/release/bbs-search-backend"]
