@@ -54,7 +54,7 @@ fn cors() -> CorsLayer {
 
 async fn bootstrap() -> Result<()> {
     //let app_config = AppConfig::new()?;
-    dotenvy::dotenv()?;
+    dotenvy::dotenv().ok();
     let database_url = std::env::var("DATABASE_URL").context("DATABASE_URL is not set")?;
     let pool = connect_database(&database_url)?;
 
