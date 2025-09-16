@@ -78,7 +78,7 @@ async fn bootstrap() -> Result<()> {
         .layer(cors())
         .with_state(registry);
 
-    let addr = SocketAddr::new(Ipv4Addr::LOCALHOST.into(), 3000);
+    let addr = SocketAddr::new(Ipv4Addr::UNSPECIFIED.into(), 3000);
     let listener = TcpListener::bind(addr).await?;
 
     tracing::info!("Listening on {}", addr);
