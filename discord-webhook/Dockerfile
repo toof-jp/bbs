@@ -14,6 +14,9 @@ RUN cargo build --release
 
 FROM debian:bookworm-slim
 WORKDIR /discord-webhook
+RUN apt-get update \
+    && apt-get install --no-install-recommends -y ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
 COPY --from=builder /discord-webhook/target/release/bbs-discord-webhook ./target/release/bbs-discord-webhook
 USER 1000
 ENTRYPOINT ["./target/release/bbs-discord-webhook"]
