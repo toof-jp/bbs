@@ -1,0 +1,64 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n            SELECT *\n            FROM res\n            WHERE no > $1\n            ORDER BY no ASC\n        ",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "no",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 1,
+        "name": "name_and_trip",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 2,
+        "name": "datetime",
+        "type_info": "Timestamp"
+      },
+      {
+        "ordinal": 3,
+        "name": "datetime_text",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 4,
+        "name": "id",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 5,
+        "name": "main_text",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 6,
+        "name": "main_text_html",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 7,
+        "name": "oekaki_id",
+        "type_info": "Int4"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Int4"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true
+    ]
+  },
+  "hash": "affa808f50aca981f80c236bde28a0d9efc3f0c46ec7ff0a3a98d05118b2918b"
+}
