@@ -1,5 +1,5 @@
 [package]
-name = "nico_bbs"
+name = "bbs-search-crawler"
 version = "0.1.0"
 authors = ["toof-jp <toof.jp.mail@gmail.com>"]
 edition = "2018"
@@ -19,13 +19,13 @@ html5ever = "0.26.0"
 kuchikiki = "0.8.2"
 lazy_static = "1.4.0"
 markup5ever = "0.11.0"
-niconico = "0.2.0"
+niconico = "0.3.0"
 regex = "1.9.3"
-reqwest = { version = "0.12", features = ["json", "cookies", "stream", "rustls-tls"] }
+reqwest = { version = "0.12", default-features = false, features = ["json", "cookies", "stream", "rustls-tls"] }
 scraper = "0.12.0"
 secrecy = "0.10.3"
 select = "0.6.0"
 serde = { version = "1.0.181", features = ["derive"] }
-sqlx = { version = "0.7.4", features = [ "chrono", "postgres", "runtime-tokio-native-tls" ] }
+sqlx = { version = "0.7.4", features = [ "chrono", "postgres", "runtime-tokio-rustls"] }
 tempfile = "3.7.0"
 tokio = { version = "1.37.0", features = [ "full" ] }
