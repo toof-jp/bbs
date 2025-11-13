@@ -1,4 +1,4 @@
-use nico_bbs::Board;
+use bbs_search_crawler::Board;
 use niconico::{login, Credentials};
 
 #[tokio::main]
