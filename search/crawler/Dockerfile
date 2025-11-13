@@ -6,13 +6,13 @@ FROM chef AS planner
 COPY . .
 RUN cargo chef prepare --recipe-path recipe.json
 
-FROM chef AS builder 
+FROM chef AS builder
 COPY --from=planner /search/crawler/recipe.json recipe.json
 RUN cargo chef cook --release --recipe-path recipe.json
 COPY . .
 RUN cargo build --release
 
-FROM debian:bookworm-slim 
+FROM debian:trixie-slim
 WORKDIR /search/crawler
 COPY --from=builder ./search/crawler/target/release/bbs-search-crawler ./target/release/bbs-search-crawler
 USER 1000
