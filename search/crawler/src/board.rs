@@ -221,13 +221,14 @@ impl Board {
                 for (res, oekaki) in vec {
                     dbg!(res.no);
                     if res.no > max_no {
-                        insert_res(pool, &res).await.unwrap();
                         if let Some(o) = oekaki {
                             insert_oekaki(pool, &o).await.unwrap();
                             self.save_oekakiko(user_session, &o, s3_client, bucket_name)
                                 .await
                                 .unwrap();
                         }
+                        // wait for upload
+                        insert_res(pool, &res).await.unwrap();
                         max_no = res.no;
                     }
                 }
