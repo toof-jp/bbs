@@ -36,7 +36,7 @@ pub async fn insert_oekaki(pool: &sqlx::PgPool, oekaki: &Oekaki) -> Result<()> {
         r#"
         INSERT INTO oekaki (oekaki_id, oekaki_title, original_oekaki_res_no)
         VALUES ($1, $2, $3)
-        ON CONFLICT DO NOTING
+        ON CONFLICT DO NOTHING
         "#,
         oekaki.oekaki_id,
         oekaki.oekaki_title,
