@@ -178,7 +178,7 @@ impl EventHandler for Bot {
 
 #[tokio::main]
 async fn main() -> Result<()> {
-    dotenvy::dotenv().expect("Failed to load .env file");
+    dotenvy::dotenv().ok();
 
     // Initialize logger with RUST_LOG environment variable
     env_logger::init();
