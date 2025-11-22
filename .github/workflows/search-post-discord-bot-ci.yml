@@ -50,8 +50,8 @@ jobs:
       - name: Build & Push
         uses: docker/build-push-action@v6
         with:
-          context: search-post-dicord-bot
-          file: search-post-dicord-bot/Dockerfile
+          context: search-post-discord-bot
+          file: search-post-discord-bot/Dockerfile
           platforms: linux/amd64
           push: true
           tags: ${{ steps.meta.outputs.tags }}
