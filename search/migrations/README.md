@@ -1,4 +1,7 @@
 # migrations
+
+set `DATABASE_URL` enviroment variable
+
 ```
 sqlx migrate run
 ```
