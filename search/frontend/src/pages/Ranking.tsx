@@ -68,14 +68,17 @@ export default function Ranking() {
   const formatDateTime = (dateTimeStr: string) => {
     try {
       const date = new Date(dateTimeStr);
-      return date.toLocaleString('ja-JP', {
+      // Backend timestamps are serialized as if they were UTC, so format
+      // them in UTC to avoid the browser adding the local offset (JST+9h).
+      return new Intl.DateTimeFormat('ja-JP', {
+        timeZone: 'UTC',
         year: 'numeric',
         month: '2-digit',
         day: '2-digit',
         hour: '2-digit',
         minute: '2-digit',
         second: '2-digit',
-      });
+      }).format(date);
     } catch {
       return dateTimeStr;
     }

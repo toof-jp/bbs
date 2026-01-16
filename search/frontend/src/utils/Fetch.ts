@@ -1,6 +1,6 @@
 import { FormData, RankingParams, RankingResponse } from "../types";
 
-export const BASE_URL = import.meta.env.VITE_BASE_URL;
+export const BASE_URL = import.meta.env.VITE_BASE_URL || "https://bbs.toof.jp";
 export const IMAGE_BASE_URL = import.meta.env.VITE_IMAGE_BASE_URL || `${BASE_URL}/images`;
 
 export function getImageUrl(oekakiId: number): string {
