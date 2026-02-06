@@ -39,14 +39,21 @@ pub struct Board {
     pub top_bbs_url: String,
     pub bbs_id: String,
     pub hash_key: Option<String>,
+    client: Client,
 }
 
 impl Board {
     pub fn new(top_bbs_url: &str, bbs_id: &str) -> Board {
+        let client = Client::builder()
+            .user_agent("toof-jp/bbs")
+            .build()
+            .expect("failed to build HTTP client");
+
         Board {
             top_bbs_url: top_bbs_url.to_string(),
             bbs_id: bbs_id.to_string(),
             hash_key: None,
+            client,
         }
     }
 
@@ -71,7 +78,8 @@ impl Board {
     }
 
     async fn try_get_hash_key(&mut self, user_session: &UserSession) -> Result<()> {
-        let response = Client::new()
+        let response = self
+            .client
             .get(&self.top_bbs_url)
             .header(reqwest::header::COOKIE, user_session.0.expose_secret())
             .send()
@@ -120,7 +128,9 @@ impl Board {
 
         while attempts < MAX_ATTEMPTS {
             let url = format!("{}?hash_key={}", url, self.hash_key.as_ref().unwrap());
-            match reqwest::get(&url).await {
+            let res = self.client.get(&url).send().await;
+            
+            match res {
                 Ok(response) => {
                     if response.status().as_u16() == 200 {
                         return Ok(response);
