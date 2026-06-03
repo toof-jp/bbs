@@ -56,6 +56,6 @@ export interface RankingParams {
   oekaki?: boolean;
   since?: string;
   until?: string;
-  ranking_type?: 'post_count' | 'recent_activity';
+  ranking_type?: "post_count" | "recent_activity";
   min_posts?: number;
 }

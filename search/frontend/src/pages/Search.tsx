@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import InfiniteScroll from "react-infinite-scroller";
 import { useSearchParams } from "react-router-dom";
 
-import { ResJson, CountJson, FormData } from "../types";
+import type { ResJson, CountJson, FormData } from "../types";
 import { fetchData, getImageUrl } from "../utils/Fetch";
 import { Form } from "../components/Form";
 import { Count } from "../components/Count";
@@ -29,10 +29,10 @@ export default function Search() {
   const RESULT_LIMIT = 100;
 
   const handleIdClick = (id: string) => {
-    setFormData(prev => ({ ...prev, id }));
+    setFormData((prev) => ({ ...prev, id }));
     // スクロールしてフォームを表示
     if (formRef.current) {
-      formRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      formRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   };
 
@@ -74,7 +74,7 @@ export default function Search() {
   };
 
   const loadMore = async () => {
-    let response = await fetchData("search", formData, cursor.current);
+    const response = await fetchData("search", formData, cursor.current);
     if (response.length < RESULT_LIMIT) {
       setHasMore(false);
       if (response.length === 0) {
@@ -85,6 +85,7 @@ export default function Search() {
     setResult([...result, ...response]);
   };
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: URL query params are loaded once on page entry.
   useEffect(() => {
     if (searchParams.toString()) {
       handleFormSubmit(formData);
@@ -94,9 +95,9 @@ export default function Search() {
   return (
     <>
       <Header />
-      <div className="min-h-screen bg-gray-100 py-8 px-4">
+      <div className="min-h-screen bg-gray-100 py-8 px-4 dark:bg-gray-950">
         <div className="max-w-4xl mx-auto">
-          <h1 className="text-2xl font-bold text-gray-800 mb-4 text-center">
+          <h1 className="text-2xl font-bold text-gray-800 mb-4 text-center dark:text-gray-100">
             掲示板検索
           </h1>
           <div ref={formRef}>
@@ -136,12 +137,12 @@ function Result({
 }) {
   const loader = (
     <div key="loader" className="flex justify-center py-4 text-gray-600">
-      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-600"></div>
+      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-600" />
     </div>
   );
 
   return (
-    <div className="bg-white shadow-md rounded-lg p-6">
+    <div className="bg-white shadow-md rounded-lg p-6 dark:bg-gray-900">
       <Count count={count} />
       <InfiniteScroll
         loadMore={loadMore}
@@ -149,7 +150,7 @@ function Result({
         loader={loader}
         className="space-y-4"
       >
-        <ul className="divide-y divide-gray-200">
+        <ul className="divide-y divide-gray-200 dark:divide-gray-800">
           {result.map((res: ResJson) => (
             <Res key={res.no} res={res} onIdClick={onIdClick} />
           ))}
@@ -159,19 +160,29 @@ function Result({
   );
 }
 
-function Res({ res, onIdClick }: { res: ResJson; onIdClick: (id: string) => void }) {
+function Res({
+  res,
+  onIdClick,
+}: { res: ResJson; onIdClick: (id: string) => void }) {
   return (
     <li className="py-4">
-      <div className="text-sm text-gray-600 mb-2">
+      <div className="text-sm text-gray-600 mb-2 dark:text-gray-400">
         <NoLink no={res.no} /> <div className="inline">{res.name_and_trip}</div>{" "}
         <div className="inline">{res.datetime_text}</div>{" "}
-        <div className="inline">ID: <button 
-          onClick={() => onIdClick(res.id)}
-          className="hover:underline text-blue-600 cursor-pointer"
-        >{res.id}</button></div>
+        <div className="inline">
+          ID:{" "}
+          <button
+            type="button"
+            onClick={() => onIdClick(res.id)}
+            className="hover:underline text-blue-600 cursor-pointer dark:text-blue-400"
+          >
+            {res.id}
+          </button>
+        </div>
       </div>
       <div
-        className="text-gray-800 prose prose-sm max-w-none prose-a:text-blue-500 prose-a:no-underline hover:prose-a:underline"
+        className="text-gray-800 prose prose-sm max-w-none prose-a:text-blue-500 prose-a:no-underline hover:prose-a:underline dark:prose-invert dark:text-gray-100 dark:prose-a:text-blue-400"
+        // biome-ignore lint/security/noDangerouslySetInnerHtml: backend provides pre-rendered post HTML.
         dangerouslySetInnerHTML={{ __html: res.main_text_html }}
       />
       {res.oekaki_id && <Oekaki res={res} />}
@@ -180,15 +191,21 @@ function Res({ res, onIdClick }: { res: ResJson; onIdClick: (id: string) => void
 }
 
 function Oekaki({ res }: { res: ResJson }) {
-  const imageUrl = getImageUrl(res.oekaki_id!);
+  if (!res.oekaki_id) {
+    return null;
+  }
+
+  const imageUrl = getImageUrl(res.oekaki_id);
   return (
-    <div className="mt-2 prose prose-sm">
+    <div className="mt-2 prose prose-sm dark:prose-invert">
       <img src={imageUrl} alt={res.oekaki_title} className="max-w-full" />
       {res.oekaki_title && (
-        <div className="text-gray-800">タイトル: {res.oekaki_title}</div>
+        <div className="text-gray-800 dark:text-gray-100">
+          タイトル: {res.oekaki_title}
+        </div>
       )}
       {res.original_oekaki_res_no && (
-        <div className="text-gray-800">
+        <div className="text-gray-800 dark:text-gray-100">
           <NoLink no={res.original_oekaki_res_no} /> この絵を基にしています！
         </div>
       )}
