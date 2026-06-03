@@ -63,9 +63,9 @@ export function Header() {
               onChange={(event) => setTheme(event.target.value as ThemeSetting)}
               className="rounded border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/30 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
             >
-              <option value="light">Light</option>
-              <option value="dark">Dark</option>
-              <option value="system">OSに合わせる</option>
+              <option value="light">☀️ ライト</option>
+              <option value="dark">🌙 ダーク</option>
+              <option value="system">💻 OSに合わせる</option>
             </select>
           </div>
         </div>
