@@ -1,11 +1,27 @@
 <!doctype html>
-<html lang="en">
+<html lang="ja">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>掲示板検索</title>
+    <script>
+      (() => {
+        const storedTheme = localStorage.getItem("bbs-search-theme");
+        const theme =
+          storedTheme === "light" || storedTheme === "dark" || storedTheme === "system"
+            ? storedTheme
+            : "system";
+        const shouldUseDark =
+          theme === "dark" ||
+          (theme === "system" &&
+            window.matchMedia("(prefers-color-scheme: dark)").matches);
+
+        document.documentElement.classList.toggle("dark", shouldUseDark);
+        document.documentElement.style.colorScheme = shouldUseDark ? "dark" : "light";
+      })();
+    </script>
   </head>
-  <body>
+  <body class="bg-gray-100 dark:bg-gray-950">
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
