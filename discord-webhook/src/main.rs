@@ -40,14 +40,12 @@ async fn main() -> Result<()> {
             post(&webhook_url, &res, &image_url_prefix).await?;
             eprintln!("posted: {}", res.no);
             max_no = res.no;
-            redis_conn.set("max_no", max_no).await?;
+            redis_conn.set::<_, _, ()>("max_no", max_no).await?;
             sleep(Duration::from_millis(500));
         }
 
         sleep(Duration::from_secs(1));
     }
-
-    Ok(())
 }
 
 async fn post(webhook_url: &str, res: &Res, image_url_prefix: &str) -> Result<()> {
