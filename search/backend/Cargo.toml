@@ -15,7 +15,7 @@ api = { path = "api" }
 kernel = { path = "kernel" }
 shared = { path = "shared" }
 registry = { path = "registry" }
-axum = { version = "0.7.4", features = ["macros"] }
+axum = { version = "0.8.0", features = ["macros"] }
 serde = { version = "1.0", features = ["derive"] }
 chrono = { version = "0.4.38", features = ["serde"] } 
 sqlx = { version = "0.8.2", features = ["chrono", "postgres", "macros", "runtime-tokio-rustls"] }
