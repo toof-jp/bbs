@@ -28,7 +28,7 @@ anyhow = "1.0.76"
 async-trait = "0.1.83"
 derive-new = "0.7.0"
 tracing-subscriber = { version = "0.3.19", features = ["env-filter"] }
-strum = { version = "0.26.0", features = ["derive"] }
+strum = { version = "0.28.0", features = ["derive"] }
 
 [dependencies]
 adapter.workspace = true
