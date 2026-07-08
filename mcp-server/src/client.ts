@@ -1,4 +1,5 @@
 const BASE_URL = process.env.BACKEND_BASE_URL ?? "http://localhost:3000";
+const IMAGE_BASE_URL = process.env.IMAGE_BASE_URL ?? `${BASE_URL}/images`;
 
 export type QueryParams = Record<string, string | number | boolean | undefined>;
 
@@ -14,6 +15,22 @@ export async function apiGet<T>(path: string, params: QueryParams): Promise<T> {
     throw new Error(`search-backend returned ${res.status}: ${await res.text()}`);
   }
   return (await res.json()) as T;
+}
+
+export async function fetchOekakiImage(
+  oekakiId: number,
+): Promise<{ data: string; mimeType: string }> {
+  const res = await fetch(`${IMAGE_BASE_URL}/${oekakiId}.png`);
+  if (!res.ok) {
+    throw new Error(
+      `image server returned ${res.status} for oekaki_id=${oekakiId}`,
+    );
+  }
+  const buffer = Buffer.from(await res.arrayBuffer());
+  return {
+    data: buffer.toString("base64"),
+    mimeType: res.headers.get("content-type") ?? "image/png",
+  };
 }
 
 export interface Res {
