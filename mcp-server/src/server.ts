@@ -1,6 +1,12 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
-import { apiGet, Count, RankingResponse, Res } from "./client.js";
+import {
+  apiGet,
+  fetchOekakiImage,
+  Count,
+  RankingResponse,
+  Res,
+} from "./client.js";
 
 const dateSchema = z
   .string()
@@ -126,6 +132,33 @@ export function buildServer(): McpServer {
         total_unique_ids: data.total_unique_ids,
         total_res_count: data.total_res_count,
       });
+    },
+  );
+
+  server.registerTool(
+    "get_oekaki_image",
+    {
+      title: "お絵かき画像取得",
+      description:
+        "掲示板のお絵かき画像を取得する。search_postsの結果のoekaki_idを指定する。",
+      inputSchema: {
+        oekaki_id: z
+          .number()
+          .int()
+          .describe("お絵かきID (search_postsの結果のoekaki_id)"),
+      },
+    },
+    async ({ oekaki_id }) => {
+      const image = await fetchOekakiImage(oekaki_id);
+      return {
+        content: [
+          {
+            type: "image" as const,
+            data: image.data,
+            mimeType: image.mimeType,
+          },
+        ],
+      };
     },
   );
 
