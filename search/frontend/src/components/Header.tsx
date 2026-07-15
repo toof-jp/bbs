@@ -51,6 +51,9 @@ export function Header() {
               <Link to="/ranking" className={getLinkClassName("/ranking")}>
                 IDランキング
               </Link>
+              <Link to="/mcp" className={getLinkClassName("/mcp")}>
+                MCPサーバー
+              </Link>
             </div>
           </div>
           <div className="flex items-center">
