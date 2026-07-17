@@ -338,15 +338,15 @@ export default function Viewer() {
       <div className="min-h-screen bg-gray-50 px-4 py-8 dark:bg-gray-950">
         <div className="max-w-4xl mx-auto">
           <h1 className="page-title">掲示板ビュワー</h1>
-          <div className="card mb-4 p-4">
-            <div className="flex flex-wrap items-center gap-4">
+          <div className="card sticky top-16 z-30 mb-4 bg-white/95 p-4 backdrop-blur dark:bg-gray-900/95">
+            <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
               <form
                 onSubmit={handleNoSubmit}
                 className="flex items-center gap-2"
               >
                 <label
                   htmlFor="jump-no"
-                  className="text-sm text-gray-700 dark:text-gray-300"
+                  className="shrink-0 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300"
                 >
                   レス番号
                 </label>
@@ -356,13 +356,13 @@ export default function Viewer() {
                   min="1"
                   value={noInput}
                   onChange={(event) => setNoInput(event.target.value)}
-                  className={`${inputClassName} w-32`}
+                  className={`${inputClassName} min-w-0 flex-1 sm:w-32 sm:flex-none`}
                   placeholder="1"
                 />
                 <button
                   type="submit"
                   disabled={isJumping}
-                  className={buttonClassName}
+                  className={`${buttonClassName} shrink-0`}
                 >
                   ジャンプ
                 </button>
@@ -373,7 +373,7 @@ export default function Viewer() {
               >
                 <label
                   htmlFor="jump-datetime"
-                  className="text-sm text-gray-700 dark:text-gray-300"
+                  className="shrink-0 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300"
                 >
                   日時
                 </label>
@@ -382,12 +382,12 @@ export default function Viewer() {
                   type="datetime-local"
                   value={datetimeInput}
                   onChange={(event) => setDatetimeInput(event.target.value)}
-                  className={`${inputClassName} w-auto`}
+                  className={`${inputClassName} min-w-0 flex-1 sm:w-auto sm:flex-none`}
                 />
                 <button
                   type="submit"
                   disabled={isJumping}
-                  className={buttonClassName}
+                  className={`${buttonClassName} shrink-0`}
                 >
                   ジャンプ
                 </button>
@@ -396,7 +396,7 @@ export default function Viewer() {
                 type="button"
                 onClick={handleLatestClick}
                 disabled={isJumping}
-                className="btn-secondary"
+                className="btn-secondary self-start sm:self-auto"
               >
                 最新へ
               </button>
