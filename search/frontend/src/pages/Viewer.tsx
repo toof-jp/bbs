@@ -54,7 +54,7 @@ export default function Viewer() {
   const loadingDown = useRef(false);
   const pendingScrollHeight = useRef<number | null>(null);
   const pendingScrollBottom = useRef(false);
-  const topSentinelRef = useRef<HTMLDivElement>(null);
+  const topObserver = useRef<IntersectionObserver | null>(null);
 
   const setHasMoreUpBoth = (value: boolean) => {
     hasMoreUpRef.current = value;
@@ -272,22 +272,28 @@ export default function Viewer() {
     }
   }, [result]);
 
-  useEffect(() => {
-    const sentinel = topSentinelRef.current;
-    if (!sentinel) {
-      return;
-    }
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries.some((entry) => entry.isIntersecting)) {
-          loadUp();
-        }
-      },
-      { rootMargin: "300px 0px 0px 0px" },
-    );
-    observer.observe(sentinel);
-    return () => observer.disconnect();
-  }, [loadUp]);
+  // センチネルはジャンプ完了後に初めて DOM に現れるため、
+  // useEffect ではなく callback ref で Observer を設置する
+  const topSentinelRef = useCallback(
+    (node: HTMLDivElement | null) => {
+      topObserver.current?.disconnect();
+      topObserver.current = null;
+      if (!node) {
+        return;
+      }
+      const observer = new IntersectionObserver(
+        (entries) => {
+          if (entries.some((entry) => entry.isIntersecting)) {
+            loadUp();
+          }
+        },
+        { rootMargin: "300px 0px 0px 0px" },
+      );
+      observer.observe(node);
+      topObserver.current = observer;
+    },
+    [loadUp],
+  );
 
   const handleNoSubmit = (event: React.FormEvent) => {
     event.preventDefault();
