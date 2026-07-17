@@ -6,9 +6,16 @@ export function Count({ count }: { count: CountJson | null }) {
   }
 
   return (
-    <div className="text-gray-800 prose prose-sm max-w-none prose-a:text-blue-500 prose-a:no-underline hover:prose-a:underline dark:prose-invert dark:text-gray-100 dark:prose-a:text-blue-400">
-      検索結果: {count.total_res_count?.toLocaleString() || "0"}件
-      (書き込みID数: {count.unique_id_count?.toLocaleString() || "0"}件)
+    <div className="mb-2 text-sm text-gray-600 dark:text-gray-300">
+      検索結果:{" "}
+      <span className="font-semibold text-gray-900 dark:text-gray-50">
+        {count.total_res_count?.toLocaleString() || "0"}
+      </span>
+      件 (書き込みID数:{" "}
+      <span className="font-semibold text-gray-900 dark:text-gray-50">
+        {count.unique_id_count?.toLocaleString() || "0"}
+      </span>
+      件)
     </div>
   );
 }

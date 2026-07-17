@@ -95,11 +95,9 @@ export default function Search() {
   return (
     <>
       <Header />
-      <div className="min-h-screen bg-gray-100 py-8 px-4 dark:bg-gray-950">
+      <div className="min-h-screen bg-gray-50 px-4 py-8 dark:bg-gray-950">
         <div className="max-w-7xl mx-auto">
-          <h1 className="text-2xl font-bold text-gray-800 mb-4 text-center dark:text-gray-100">
-            お絵描きをまとめる機械
-          </h1>
+          <h1 className="page-title">お絵描きをまとめる機械</h1>
           <div ref={formRef}>
             <Form
               onSubmit={handleFormSubmit}
@@ -136,13 +134,13 @@ function Result({
   onIdClick: (id: string) => void;
 }) {
   const loader = (
-    <div key="loader" className="flex justify-center py-4 text-gray-600">
-      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-600" />
+    <div key="loader" className="flex justify-center py-4">
+      <div className="spinner h-8 w-8" />
     </div>
   );
 
   return (
-    <div className="bg-white shadow-md rounded-lg p-6 dark:bg-gray-900">
+    <div className="card p-6">
       <Count count={count} />
       <InfiniteScroll
         loadMore={loadMore}
@@ -171,7 +169,7 @@ function OekakiCard({
   const imageUrl = getImageUrl(res.oekaki_id);
 
   return (
-    <div className="bg-white h-full border border-gray-200 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+    <div className="card h-full overflow-hidden transition hover:shadow-md">
       <div className="aspect-w-1 aspect-h-1 border-b border-gray-200 dark:border-gray-800">
         <img
           src={imageUrl}
@@ -179,21 +177,23 @@ function OekakiCard({
           className="w-full h-full object-cover"
         />
       </div>
-      <div className="text-sm text-gray-600 mb-2 p-4 dark:text-gray-400">
-        <NoLink no={res.no} /> <div className="inline">{res.name_and_trip}</div>{" "}
-        <div className="inline">{res.datetime_text}</div>{" "}
-        <div className="inline">
-          ID:{" "}
+      <div className="p-4 text-sm text-gray-500 dark:text-gray-400">
+        <div className="mb-2 flex flex-wrap items-center gap-x-3 gap-y-1">
+          <NoLink no={res.no} />
+          <span className="font-medium text-gray-700 dark:text-gray-300">
+            {res.name_and_trip}
+          </span>
+          <span>{res.datetime_text}</span>
           <button
             type="button"
             onClick={() => onIdClick(res.id)}
-            className="hover:underline text-blue-600 cursor-pointer dark:text-blue-400"
+            className="cursor-pointer rounded bg-gray-100 px-1.5 py-0.5 font-mono text-xs text-gray-600 transition hover:bg-indigo-50 hover:text-indigo-600 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-indigo-500/10 dark:hover:text-indigo-300"
           >
-            {res.id}
+            ID: {res.id}
           </button>
         </div>
         <div
-          className="text-gray-800 prose prose-sm max-w-none prose-a:text-blue-500 prose-a:no-underline hover:prose-a:underline dark:prose-invert dark:text-gray-100 dark:prose-a:text-blue-400"
+          className="text-gray-800 prose prose-sm max-w-none prose-a:text-indigo-600 prose-a:no-underline hover:prose-a:underline dark:prose-invert dark:text-gray-100 dark:prose-a:text-indigo-400"
           // biome-ignore lint/security/noDangerouslySetInnerHtml: backend provides pre-rendered post HTML.
           dangerouslySetInnerHTML={{ __html: res.main_text_html }}
         />

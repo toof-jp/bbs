@@ -138,11 +138,7 @@ export default function Viewer() {
   };
 
   const jumpToNoCore = async (no: number) => {
-    const down: ResJson[] = await fetchData(
-      "search",
-      viewerForm(true),
-      no - 1,
-    );
+    const down: ResJson[] = await fetchData("search", viewerForm(true), no - 1);
     if (down.length === 0) {
       setNotice("指定のレス番号以降の投稿がないため、最新のレスを表示します。");
       await showLatest();
@@ -328,27 +324,26 @@ export default function Viewer() {
   };
 
   const spinner = (
-    <div className="flex justify-center py-4 text-gray-600">
-      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-600 dark:border-gray-400" />
+    <div className="flex justify-center py-4">
+      <div className="spinner h-8 w-8" />
     </div>
   );
 
-  const inputClassName =
-    "rounded border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/30 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100";
-  const buttonClassName =
-    "rounded bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50";
+  const inputClassName = "input";
+  const buttonClassName = "btn-primary";
 
   return (
     <>
       <Header />
-      <div className="min-h-screen bg-gray-100 py-8 px-4 dark:bg-gray-950">
+      <div className="min-h-screen bg-gray-50 px-4 py-8 dark:bg-gray-950">
         <div className="max-w-4xl mx-auto">
-          <h1 className="text-2xl font-bold text-gray-800 mb-4 text-center dark:text-gray-100">
-            掲示板ビュワー
-          </h1>
-          <div className="bg-white shadow-md rounded-lg p-4 mb-4 dark:bg-gray-900">
+          <h1 className="page-title">掲示板ビュワー</h1>
+          <div className="card mb-4 p-4">
             <div className="flex flex-wrap items-center gap-4">
-              <form onSubmit={handleNoSubmit} className="flex items-center gap-2">
+              <form
+                onSubmit={handleNoSubmit}
+                className="flex items-center gap-2"
+              >
                 <label
                   htmlFor="jump-no"
                   className="text-sm text-gray-700 dark:text-gray-300"
@@ -387,7 +382,7 @@ export default function Viewer() {
                   type="datetime-local"
                   value={datetimeInput}
                   onChange={(event) => setDatetimeInput(event.target.value)}
-                  className={inputClassName}
+                  className={`${inputClassName} w-auto`}
                 />
                 <button
                   type="submit"
@@ -401,63 +396,58 @@ export default function Viewer() {
                 type="button"
                 onClick={handleLatestClick}
                 disabled={isJumping}
-                className="rounded border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
+                className="btn-secondary"
               >
                 最新へ
               </button>
             </div>
           </div>
           {notice && (
-            <div className="mb-4 rounded-lg bg-yellow-50 px-4 py-3 text-sm text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-200">
+            <div className="mb-4 rounded-lg border border-yellow-200 bg-yellow-50 px-4 py-3 text-sm text-yellow-800 dark:border-yellow-900 dark:bg-yellow-900/30 dark:text-yellow-200">
               {notice}
             </div>
           )}
-          {isJumping ? (
-            spinner
-          ) : (
-            result.length > 0 && (
-              <div
-                className="bg-white shadow-md rounded-lg p-6 dark:bg-gray-900"
-                style={{ overflowAnchor: "none" }}
-              >
-                <div ref={topSentinelRef} />
-                {hasMoreUp ? (
-                  spinner
-                ) : (
-                  <div className="pb-2 text-center text-sm text-gray-500 dark:text-gray-400">
-                    これより前のレスはありません
-                  </div>
-                )}
-                <InfiniteScroll
-                  loadMore={loadDown}
-                  hasMore={hasMoreDown}
-                  loader={spinner}
-                >
-                  <ul className="divide-y divide-gray-200 dark:divide-gray-800">
-                    {result.map((res) => (
-                      <Res
-                        key={res.no}
-                        res={res}
-                        onIdClick={handleIdClick}
-                        highlighted={res.no === anchorNo}
-                      />
-                    ))}
-                  </ul>
-                </InfiniteScroll>
-                {!hasMoreDown && (
-                  <div className="pt-4 text-center">
-                    <button
-                      type="button"
-                      onClick={() => loadDown()}
-                      className="rounded border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
-                    >
-                      新着を確認
-                    </button>
-                  </div>
-                )}
-              </div>
-            )
-          )}
+          {isJumping
+            ? spinner
+            : result.length > 0 && (
+                <div className="card p-6" style={{ overflowAnchor: "none" }}>
+                  <div ref={topSentinelRef} />
+                  {hasMoreUp ? (
+                    spinner
+                  ) : (
+                    <div className="pb-2 text-center text-sm text-gray-500 dark:text-gray-400">
+                      これより前のレスはありません
+                    </div>
+                  )}
+                  <InfiniteScroll
+                    loadMore={loadDown}
+                    hasMore={hasMoreDown}
+                    loader={spinner}
+                  >
+                    <ul className="divide-y divide-gray-200 dark:divide-gray-800">
+                      {result.map((res) => (
+                        <Res
+                          key={res.no}
+                          res={res}
+                          onIdClick={handleIdClick}
+                          highlighted={res.no === anchorNo}
+                        />
+                      ))}
+                    </ul>
+                  </InfiniteScroll>
+                  {!hasMoreDown && (
+                    <div className="pt-4 text-center">
+                      <button
+                        type="button"
+                        onClick={() => loadDown()}
+                        className="btn-secondary"
+                      >
+                        新着を確認
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
         </div>
       </div>
     </>

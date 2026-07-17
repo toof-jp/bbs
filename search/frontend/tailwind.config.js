@@ -8,7 +8,19 @@ export default {
     "./src/**/*.{js,jsx,ts,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        sans: [
+          "Inter",
+          "Hiragino Sans",
+          "Noto Sans JP",
+          "Yu Gothic UI",
+          "Meiryo",
+          "system-ui",
+          "sans-serif",
+        ],
+      },
+    },
   },
   plugins: [
     typography,

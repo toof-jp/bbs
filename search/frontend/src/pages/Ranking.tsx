@@ -88,11 +88,9 @@ export default function Ranking() {
   return (
     <>
       <Header />
-      <div className="min-h-screen bg-gray-100 py-8 px-4 dark:bg-gray-950">
+      <div className="min-h-screen bg-gray-50 px-4 py-8 dark:bg-gray-950">
         <div className="max-w-7xl mx-auto">
-          <h1 className="text-2xl font-bold text-gray-800 mb-4 text-center dark:text-gray-100">
-            IDランキング
-          </h1>
+          <h1 className="page-title">IDランキング</h1>
 
           <div ref={formRef} className="mb-8">
             <RankingForm
@@ -103,30 +101,37 @@ export default function Ranking() {
           </div>
 
           {(totalUniqueIds > 0 || totalResCount > 0) && (
-            <div className="mb-4 text-gray-700 dark:text-gray-300">
+            <div className="mb-4 text-sm text-gray-600 dark:text-gray-300">
               <p>
-                検索結果: {totalResCount?.toLocaleString() || "0"}件
-                (書き込みID数: {totalUniqueIds?.toLocaleString() || "0"}件)
+                検索結果:{" "}
+                <span className="font-semibold text-gray-900 dark:text-gray-50">
+                  {totalResCount?.toLocaleString() || "0"}
+                </span>
+                件 (書き込みID数:{" "}
+                <span className="font-semibold text-gray-900 dark:text-gray-50">
+                  {totalUniqueIds?.toLocaleString() || "0"}
+                </span>
+                件)
               </p>
             </div>
           )}
 
           {error && (
-            <div className="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded dark:border-red-900 dark:bg-red-950 dark:text-red-200">
+            <div className="mb-4 rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700 dark:border-red-900 dark:bg-red-950 dark:text-red-200">
               {error}
             </div>
           )}
 
           {loading ? (
             <div className="text-center py-8 dark:text-gray-200">
-              <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 dark:border-gray-200" />
+              <div className="spinner inline-block h-8 w-8" />
               <p className="mt-2">読み込み中...</p>
             </div>
           ) : ranking.length > 0 ? (
-            <div className="overflow-x-auto">
-              <table className="min-w-full bg-white border border-gray-300 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+            <div className="card overflow-x-auto">
+              <table className="min-w-full">
                 <thead>
-                  <tr className="bg-gray-100 border-b border-gray-300 dark:border-gray-800 dark:bg-gray-800">
+                  <tr className="border-b border-gray-200 bg-gray-50 dark:border-gray-800 dark:bg-gray-800/50">
                     <th className="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider dark:text-gray-200">
                       順位
                     </th>
@@ -150,14 +155,22 @@ export default function Ranking() {
                       key={item.rank}
                       className="hover:bg-gray-50 transition-colors dark:hover:bg-gray-800"
                     >
-                      <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
-                        {item.rank}
+                      <td className="px-4 py-3 whitespace-nowrap text-sm">
+                        {item.rank <= 3 ? (
+                          <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-indigo-50 text-xs font-bold text-indigo-700 dark:bg-indigo-500/10 dark:text-indigo-300">
+                            {item.rank}
+                          </span>
+                        ) : (
+                          <span className="text-gray-900 dark:text-gray-100">
+                            {item.rank}
+                          </span>
+                        )}
                       </td>
                       <td className="px-4 py-3 whitespace-nowrap">
                         <button
                           type="button"
                           onClick={() => handleIdClick(item.id)}
-                          className="text-blue-600 hover:text-blue-800 hover:underline text-sm font-medium dark:text-blue-400 dark:hover:text-blue-300"
+                          className="text-link font-mono text-sm font-medium"
                         >
                           {item.id}
                         </button>

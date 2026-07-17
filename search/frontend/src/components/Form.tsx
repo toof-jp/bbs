@@ -21,36 +21,24 @@ export function Form({
   }, [defaultValues, reset]);
 
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="bg-white shadow-md rounded-lg p-6 mb-8 dark:bg-gray-900"
-    >
-      <div className="mb-4">
-        <label
-          htmlFor="search-id"
-          className="block text-gray-700 text-sm font-bold mb-2 dark:text-gray-200"
-        >
-          ID:
+    <form onSubmit={handleSubmit(onSubmit)} className="card mb-8 p-6">
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div>
+          <label htmlFor="search-id" className="form-label">
+            ID
+          </label>
           <Controller
             name="id"
             control={control}
             render={({ field }) => (
-              <input
-                {...field}
-                id="search-id"
-                type="text"
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
-              />
+              <input {...field} id="search-id" type="text" className="input" />
             )}
           />
-        </label>
-      </div>
-      <div className="mb-4">
-        <label
-          htmlFor="search-name-and-trip"
-          className="block text-gray-700 text-sm font-bold mb-2 dark:text-gray-200"
-        >
-          名前:
+        </div>
+        <div>
+          <label htmlFor="search-name-and-trip" className="form-label">
+            名前
+          </label>
           <Controller
             name="name_and_trip"
             control={control}
@@ -59,18 +47,15 @@ export function Form({
                 {...field}
                 id="search-name-and-trip"
                 type="text"
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
+                className="input"
               />
             )}
           />
-        </label>
-      </div>
-      <div className="mb-4">
-        <label
-          htmlFor="search-main-text"
-          className="block text-gray-700 text-sm font-bold mb-2 dark:text-gray-200"
-        >
-          本文:
+        </div>
+        <div className="sm:col-span-2">
+          <label htmlFor="search-main-text" className="form-label">
+            本文
+          </label>
           <Controller
             name="main_text"
             control={control}
@@ -79,18 +64,15 @@ export function Form({
                 {...field}
                 id="search-main-text"
                 type="text"
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
+                className="input"
               />
             )}
           />
-        </label>
-      </div>
-      <div className="mb-4">
-        <label
-          htmlFor="search-since"
-          className="block text-gray-700 text-sm font-bold mb-2 dark:text-gray-200"
-        >
-          開始:
+        </div>
+        <div>
+          <label htmlFor="search-since" className="form-label">
+            開始
+          </label>
           <Controller
             name="since"
             control={control}
@@ -99,18 +81,15 @@ export function Form({
                 {...field}
                 id="search-since"
                 type="date"
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
+                className="input"
               />
             )}
           />
-        </label>
-      </div>
-      <div className="mb-4">
-        <label
-          htmlFor="search-until"
-          className="block text-gray-700 text-sm font-bold mb-2 dark:text-gray-200"
-        >
-          終了:
+        </div>
+        <div>
+          <label htmlFor="search-until" className="form-label">
+            終了
+          </label>
           <Controller
             name="until"
             control={control}
@@ -119,41 +98,39 @@ export function Form({
                 {...field}
                 id="search-until"
                 type="date"
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
+                className="input"
               />
             )}
           />
-        </label>
+        </div>
       </div>
-      <div className="mb-4 flex justify-between items-center">
+      <div className="mt-6 flex flex-wrap items-end justify-between gap-4">
         <fieldset>
-          <legend className="block text-gray-700 text-sm font-bold mb-2 dark:text-gray-200">
-            順番:
-          </legend>
+          <legend className="form-label">順番</legend>
           <Controller
             name="ascending"
             control={control}
             render={({ field: { onChange, value } }) => (
-              <div className="flex items-center space-x-6">
-                <label className="inline-flex items-center cursor-pointer">
+              <div className="flex items-center gap-6">
+                <label className="inline-flex cursor-pointer items-center">
                   <input
                     type="radio"
                     checked={value === true}
                     onChange={() => onChange(true)}
-                    className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-2 focus:ring-blue-500"
+                    className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-2 focus:ring-indigo-500"
                   />
-                  <span className="ml-2 text-gray-700 dark:text-gray-200">
+                  <span className="ml-2 text-sm text-gray-700 dark:text-gray-200">
                     古い順
                   </span>
                 </label>
-                <label className="inline-flex items-center cursor-pointer">
+                <label className="inline-flex cursor-pointer items-center">
                   <input
                     type="radio"
                     checked={value === false}
                     onChange={() => onChange(false)}
-                    className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-2 focus:ring-blue-500"
+                    className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-2 focus:ring-indigo-500"
                   />
-                  <span className="ml-2 text-gray-700 dark:text-gray-200">
+                  <span className="ml-2 text-sm text-gray-700 dark:text-gray-200">
                     新しい順
                   </span>
                 </label>
@@ -161,22 +138,10 @@ export function Form({
             )}
           />
         </fieldset>
-        <button
-          type="submit"
-          disabled={isSearching}
-          className={`
-            flex items-center px-4 py-2 rounded
-            ${
-              isSearching
-                ? "bg-gray-400 cursor-not-allowed"
-                : "bg-blue-500 hover:bg-blue-700"
-            }
-            text-white font-bold focus:outline-none focus:shadow-outline
-          `}
-        >
+        <button type="submit" disabled={isSearching} className="btn-primary">
           {isSearching ? (
             <>
-              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />
+              <div className="spinner h-4 w-4 border-white/40 border-t-white" />
               検索中...
             </>
           ) : (
