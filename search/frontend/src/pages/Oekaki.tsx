@@ -8,6 +8,7 @@ import { Form } from "../components/Form";
 import { Count } from "../components/Count";
 import { NoLink } from "../components/NoLink";
 import { Header } from "../components/Header";
+import { ResBody, ResMeta } from "../components/Res";
 
 export default function Search() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -169,7 +170,7 @@ function OekakiCard({
   const imageUrl = getImageUrl(res.oekaki_id);
 
   return (
-    <div className="card h-full overflow-hidden transition hover:shadow-md">
+    <div className="card h-full rounded-none transition hover:shadow-md">
       <div className="aspect-w-1 aspect-h-1 border-b border-gray-200 dark:border-gray-800">
         <img
           src={imageUrl}
@@ -177,33 +178,16 @@ function OekakiCard({
           className="w-full h-full object-cover"
         />
       </div>
-      <div className="p-4 text-sm text-gray-500 dark:text-gray-400">
-        <div className="mb-2 flex flex-wrap items-center gap-x-3 gap-y-1">
-          <NoLink no={res.no} />
-          <span className="font-medium text-gray-700 dark:text-gray-300">
-            {res.name_and_trip}
-          </span>
-          <span>{res.datetime_text}</span>
-          <button
-            type="button"
-            onClick={() => onIdClick(res.id)}
-            className="cursor-pointer rounded bg-gray-100 px-1.5 py-0.5 font-mono text-xs text-gray-600 transition hover:bg-indigo-50 hover:text-indigo-600 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-indigo-500/10 dark:hover:text-indigo-300"
-          >
-            ID: {res.id}
-          </button>
-        </div>
-        <div
-          className="text-gray-800 prose prose-sm max-w-none prose-a:text-indigo-600 prose-a:no-underline hover:prose-a:underline dark:prose-invert dark:text-gray-100 dark:prose-a:text-indigo-400"
-          // biome-ignore lint/security/noDangerouslySetInnerHtml: backend provides pre-rendered post HTML.
-          dangerouslySetInnerHTML={{ __html: res.main_text_html }}
-        />
+      <div className="p-4">
+        <ResMeta res={res} onIdClick={onIdClick} />
+        <ResBody res={res} />
         {res.oekaki_title && (
-          <div className="text-gray-800 dark:text-gray-100">
+          <div className="mt-1 text-sm text-gray-800 dark:text-gray-100">
             タイトル: {res.oekaki_title}
           </div>
         )}
         {res.original_oekaki_res_no && (
-          <div className="text-gray-800 dark:text-gray-100">
+          <div className="mt-1 text-sm text-gray-800 dark:text-gray-100">
             <NoLink no={res.original_oekaki_res_no} /> この絵を基にしています！
           </div>
         )}
