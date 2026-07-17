@@ -27,36 +27,24 @@ export function RankingForm({
   }, [defaultValues, reset]);
 
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="bg-white shadow-md rounded-lg p-6 mb-8 dark:bg-gray-900"
-    >
-      <div className="mb-4">
-        <label
-          htmlFor="ranking-id"
-          className="block text-gray-700 text-sm font-bold mb-2 dark:text-gray-200"
-        >
-          ID:
+    <form onSubmit={handleSubmit(onSubmit)} className="card p-6">
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div>
+          <label htmlFor="ranking-id" className="form-label">
+            ID
+          </label>
           <Controller
             name="id"
             control={control}
             render={({ field }) => (
-              <input
-                {...field}
-                id="ranking-id"
-                type="text"
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
-              />
+              <input {...field} id="ranking-id" type="text" className="input" />
             )}
           />
-        </label>
-      </div>
-      <div className="mb-4">
-        <label
-          htmlFor="ranking-name-and-trip"
-          className="block text-gray-700 text-sm font-bold mb-2 dark:text-gray-200"
-        >
-          名前:
+        </div>
+        <div>
+          <label htmlFor="ranking-name-and-trip" className="form-label">
+            名前
+          </label>
           <Controller
             name="name_and_trip"
             control={control}
@@ -65,18 +53,15 @@ export function RankingForm({
                 {...field}
                 id="ranking-name-and-trip"
                 type="text"
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
+                className="input"
               />
             )}
           />
-        </label>
-      </div>
-      <div className="mb-4">
-        <label
-          htmlFor="ranking-main-text"
-          className="block text-gray-700 text-sm font-bold mb-2 dark:text-gray-200"
-        >
-          本文:
+        </div>
+        <div className="sm:col-span-2">
+          <label htmlFor="ranking-main-text" className="form-label">
+            本文
+          </label>
           <Controller
             name="main_text"
             control={control}
@@ -85,18 +70,15 @@ export function RankingForm({
                 {...field}
                 id="ranking-main-text"
                 type="text"
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
+                className="input"
               />
             )}
           />
-        </label>
-      </div>
-      <div className="mb-4">
-        <label
-          htmlFor="ranking-since"
-          className="block text-gray-700 text-sm font-bold mb-2 dark:text-gray-200"
-        >
-          開始:
+        </div>
+        <div>
+          <label htmlFor="ranking-since" className="form-label">
+            開始
+          </label>
           <Controller
             name="since"
             control={control}
@@ -105,18 +87,15 @@ export function RankingForm({
                 {...field}
                 id="ranking-since"
                 type="date"
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
+                className="input"
               />
             )}
           />
-        </label>
-      </div>
-      <div className="mb-4">
-        <label
-          htmlFor="ranking-until"
-          className="block text-gray-700 text-sm font-bold mb-2 dark:text-gray-200"
-        >
-          終了:
+        </div>
+        <div>
+          <label htmlFor="ranking-until" className="form-label">
+            終了
+          </label>
           <Controller
             name="until"
             control={control}
@@ -125,29 +104,17 @@ export function RankingForm({
                 {...field}
                 id="ranking-until"
                 type="date"
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
+                className="input"
               />
             )}
           />
-        </label>
+        </div>
       </div>
-      <div className="flex justify-end">
-        <button
-          type="submit"
-          disabled={isSearching}
-          className={`
-            flex items-center px-4 py-2 rounded
-            ${
-              isSearching
-                ? "bg-gray-400 cursor-not-allowed"
-                : "bg-blue-500 hover:bg-blue-700"
-            }
-            text-white font-bold focus:outline-none focus:shadow-outline
-          `}
-        >
+      <div className="mt-6 flex justify-end">
+        <button type="submit" disabled={isSearching} className="btn-primary">
           {isSearching ? (
             <>
-              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />
+              <div className="spinner h-4 w-4 border-white/40 border-t-white" />
               検索中...
             </>
           ) : (

@@ -95,11 +95,9 @@ export default function Search() {
   return (
     <>
       <Header />
-      <div className="min-h-screen bg-gray-100 py-8 px-4 dark:bg-gray-950">
+      <div className="min-h-screen bg-gray-50 px-4 py-8 dark:bg-gray-950">
         <div className="max-w-4xl mx-auto">
-          <h1 className="text-2xl font-bold text-gray-800 mb-4 text-center dark:text-gray-100">
-            掲示板検索
-          </h1>
+          <h1 className="page-title">掲示板検索</h1>
           <div ref={formRef}>
             <Form
               onSubmit={handleFormSubmit}
@@ -136,13 +134,13 @@ function Result({
   onIdClick: (id: string) => void;
 }) {
   const loader = (
-    <div key="loader" className="flex justify-center py-4 text-gray-600">
-      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-600" />
+    <div key="loader" className="flex justify-center py-4">
+      <div className="spinner h-8 w-8" />
     </div>
   );
 
   return (
-    <div className="bg-white shadow-md rounded-lg p-6 dark:bg-gray-900">
+    <div className="card p-6">
       <Count count={count} />
       <InfiniteScroll
         loadMore={loadMore}

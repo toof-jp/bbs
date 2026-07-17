@@ -24,7 +24,7 @@ const TOOLS = [
 
 function CodeBlock({ children }: { children: string }) {
   return (
-    <pre className="overflow-x-auto rounded bg-gray-100 p-4 text-sm text-gray-800 dark:bg-gray-800 dark:text-gray-100">
+    <pre className="overflow-x-auto rounded-lg bg-gray-100 p-4 text-sm text-gray-800 dark:bg-gray-800 dark:text-gray-100">
       <code>{children}</code>
     </pre>
   );
@@ -34,20 +34,18 @@ export default function Mcp() {
   return (
     <>
       <Header />
-      <div className="min-h-screen bg-gray-100 py-8 px-4 dark:bg-gray-950">
+      <div className="min-h-screen bg-gray-50 px-4 py-8 dark:bg-gray-950">
         <div className="max-w-3xl mx-auto">
-          <h1 className="text-2xl font-bold text-gray-800 mb-4 text-center dark:text-gray-100">
-            MCPサーバー
-          </h1>
+          <h1 className="page-title">MCPサーバー</h1>
 
-          <div className="bg-white shadow-md rounded-lg p-6 mb-6 dark:bg-gray-900">
+          <div className="card mb-6 p-6">
             <p className="text-gray-700 leading-relaxed dark:text-gray-300">
               この掲示板検索は{" "}
               <a
                 href="https://modelcontextprotocol.io/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-blue-600 hover:underline dark:text-blue-400"
+                className="text-link"
               >
                 MCP (Model Context Protocol)
               </a>{" "}
@@ -56,7 +54,7 @@ export default function Mcp() {
             </p>
           </div>
 
-          <div className="bg-white shadow-md rounded-lg p-6 mb-6 dark:bg-gray-900">
+          <div className="card mb-6 p-6">
             <h2 className="text-lg font-bold text-gray-800 mb-3 dark:text-gray-100">
               エンドポイント
             </h2>
@@ -66,7 +64,7 @@ export default function Mcp() {
             </p>
           </div>
 
-          <div className="bg-white shadow-md rounded-lg p-6 mb-6 dark:bg-gray-900">
+          <div className="card mb-6 p-6">
             <h2 className="text-lg font-bold text-gray-800 mb-3 dark:text-gray-100">
               利用できるツール
             </h2>
@@ -84,7 +82,7 @@ export default function Mcp() {
             </ul>
           </div>
 
-          <div className="bg-white shadow-md rounded-lg p-6 mb-6 dark:bg-gray-900">
+          <div className="card mb-6 p-6">
             <h2 className="text-lg font-bold text-gray-800 mb-3 dark:text-gray-100">
               接続方法
             </h2>
@@ -118,7 +116,7 @@ export default function Mcp() {
             </CodeBlock>
           </div>
 
-          <div className="bg-white shadow-md rounded-lg p-6 dark:bg-gray-900">
+          <div className="card p-6">
             <h2 className="text-lg font-bold text-gray-800 mb-3 dark:text-gray-100">
               使用例
             </h2>

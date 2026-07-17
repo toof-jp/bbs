@@ -8,6 +8,7 @@ import { Form } from "../components/Form";
 import { Count } from "../components/Count";
 import { NoLink } from "../components/NoLink";
 import { Header } from "../components/Header";
+import { ResBody, ResMeta } from "../components/Res";
 
 export default function Search() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -95,11 +96,9 @@ export default function Search() {
   return (
     <>
       <Header />
-      <div className="min-h-screen bg-gray-100 py-8 px-4 dark:bg-gray-950">
+      <div className="min-h-screen bg-gray-50 px-4 py-8 dark:bg-gray-950">
         <div className="max-w-7xl mx-auto">
-          <h1 className="text-2xl font-bold text-gray-800 mb-4 text-center dark:text-gray-100">
-            お絵描きをまとめる機械
-          </h1>
+          <h1 className="page-title">お絵描きをまとめる機械</h1>
           <div ref={formRef}>
             <Form
               onSubmit={handleFormSubmit}
@@ -136,13 +135,13 @@ function Result({
   onIdClick: (id: string) => void;
 }) {
   const loader = (
-    <div key="loader" className="flex justify-center py-4 text-gray-600">
-      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-600" />
+    <div key="loader" className="flex justify-center py-4">
+      <div className="spinner h-8 w-8" />
     </div>
   );
 
   return (
-    <div className="bg-white shadow-md rounded-lg p-6 dark:bg-gray-900">
+    <div className="card p-6">
       <Count count={count} />
       <InfiniteScroll
         loadMore={loadMore}
@@ -171,7 +170,7 @@ function OekakiCard({
   const imageUrl = getImageUrl(res.oekaki_id);
 
   return (
-    <div className="bg-white h-full border border-gray-200 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+    <div className="card h-full rounded-none transition hover:shadow-md">
       <div className="aspect-w-1 aspect-h-1 border-b border-gray-200 dark:border-gray-800">
         <img
           src={imageUrl}
@@ -179,31 +178,16 @@ function OekakiCard({
           className="w-full h-full object-cover"
         />
       </div>
-      <div className="text-sm text-gray-600 mb-2 p-4 dark:text-gray-400">
-        <NoLink no={res.no} /> <div className="inline">{res.name_and_trip}</div>{" "}
-        <div className="inline">{res.datetime_text}</div>{" "}
-        <div className="inline">
-          ID:{" "}
-          <button
-            type="button"
-            onClick={() => onIdClick(res.id)}
-            className="hover:underline text-blue-600 cursor-pointer dark:text-blue-400"
-          >
-            {res.id}
-          </button>
-        </div>
-        <div
-          className="text-gray-800 prose prose-sm max-w-none prose-a:text-blue-500 prose-a:no-underline hover:prose-a:underline dark:prose-invert dark:text-gray-100 dark:prose-a:text-blue-400"
-          // biome-ignore lint/security/noDangerouslySetInnerHtml: backend provides pre-rendered post HTML.
-          dangerouslySetInnerHTML={{ __html: res.main_text_html }}
-        />
+      <div className="p-4">
+        <ResMeta res={res} onIdClick={onIdClick} />
+        <ResBody res={res} />
         {res.oekaki_title && (
-          <div className="text-gray-800 dark:text-gray-100">
+          <div className="mt-1 text-sm text-gray-800 dark:text-gray-100">
             タイトル: {res.oekaki_title}
           </div>
         )}
         {res.original_oekaki_res_no && (
-          <div className="text-gray-800 dark:text-gray-100">
+          <div className="mt-1 text-sm text-gray-800 dark:text-gray-100">
             <NoLink no={res.original_oekaki_res_no} /> この絵を基にしています！
           </div>
         )}
