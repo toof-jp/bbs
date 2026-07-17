@@ -45,6 +45,9 @@ export function Header() {
               <Link to="/" className={getLinkClassName("/")}>
                 掲示板検索
               </Link>
+              <Link to="/viewer" className={getLinkClassName("/viewer")}>
+                ビュワー
+              </Link>
               <Link to="/oekaki" className={getLinkClassName("/oekaki")}>
                 お絵かきをまとめる機械
               </Link>
