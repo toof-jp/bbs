@@ -10,17 +10,17 @@ export function ResMeta({
   onIdClick: (id: string) => void;
 }) {
   return (
-    <div className="mb-1.5 flex flex-wrap items-center gap-x-2.5 gap-y-1 text-xs text-gray-500 dark:text-gray-400">
+    <div className="mb-1.5 flex flex-wrap items-center gap-x-2.5 gap-y-1 text-xs text-label-tertiary">
       <NoLink no={res.no} />
-      <span className="text-sm font-semibold text-gray-800 dark:text-gray-200">
+      <span className="text-sm font-semibold text-label">
         {res.name_and_trip}
       </span>
-      <span>{res.datetime_text}</span>
+      <span className="text-label-secondary">{res.datetime_text}</span>
       <button
         type="button"
         onClick={() => onIdClick(res.id)}
         title="このIDの投稿を検索"
-        className="inline-flex cursor-pointer items-center gap-1 rounded-md border border-gray-200 bg-gray-50 px-1.5 py-0.5 font-mono text-[11px] text-gray-600 transition hover:border-indigo-300 hover:bg-indigo-50 hover:text-indigo-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:border-indigo-700 dark:hover:bg-indigo-500/10 dark:hover:text-indigo-300"
+        className="pressable inline-flex cursor-pointer items-center gap-1 rounded-full bg-fill px-2 py-0.5 font-mono text-[11px] text-label-secondary hover:bg-accent-soft hover:text-accent"
       >
         <svg
           className="h-3 w-3"
@@ -45,7 +45,7 @@ export function ResMeta({
 export function ResBody({ res }: { res: ResJson }) {
   return (
     <div
-      className="prose prose-sm max-w-none leading-relaxed text-gray-900 prose-a:text-indigo-600 prose-a:no-underline hover:prose-a:underline dark:prose-invert dark:text-gray-100 dark:prose-a:text-indigo-400"
+      className="prose prose-sm max-w-none leading-relaxed text-label prose-a:text-accent prose-a:no-underline hover:prose-a:underline dark:prose-invert"
       // biome-ignore lint/security/noDangerouslySetInnerHtml: backend provides pre-rendered post HTML.
       dangerouslySetInnerHTML={{ __html: res.main_text_html }}
     />
@@ -64,9 +64,7 @@ export function Res({
   return (
     <li
       className={`py-4 ${
-        highlighted
-          ? "-mx-2 rounded-lg bg-yellow-50 px-2 dark:bg-yellow-900/20"
-          : ""
+        highlighted ? "-mx-3 rounded-2xl bg-highlight px-3" : ""
       }`}
     >
       <ResMeta res={res} onIdClick={onIdClick} />
@@ -83,19 +81,18 @@ function Oekaki({ res }: { res: ResJson }) {
 
   const imageUrl = getImageUrl(res.oekaki_id);
   return (
-    <div className="prose prose-sm mt-2 dark:prose-invert">
+    <div className="prose prose-sm mt-3 dark:prose-invert">
       <img
         src={imageUrl}
         alt={res.oekaki_title}
-        className="max-w-full border border-gray-200 dark:border-gray-800"
+        className="max-w-full rounded-2xl"
+        style={{ boxShadow: "0 0 0 0.5px var(--separator)" }}
       />
       {res.oekaki_title && (
-        <div className="text-gray-800 dark:text-gray-100">
-          タイトル: {res.oekaki_title}
-        </div>
+        <div className="text-label">タイトル: {res.oekaki_title}</div>
       )}
       {res.original_oekaki_res_no && (
-        <div className="text-gray-800 dark:text-gray-100">
+        <div className="text-label">
           <NoLink no={res.original_oekaki_res_no} /> この絵を基にしています！
         </div>
       )}

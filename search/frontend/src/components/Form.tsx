@@ -111,28 +111,32 @@ export function Form({
             name="ascending"
             control={control}
             render={({ field: { onChange, value } }) => (
-              <div className="flex items-center gap-6">
-                <label className="inline-flex cursor-pointer items-center">
+              <div className="segmented">
+                <label
+                  data-selected={value === true}
+                  className="segmented-item"
+                >
                   <input
                     type="radio"
+                    name="search-order"
                     checked={value === true}
                     onChange={() => onChange(true)}
-                    className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-2 focus:ring-indigo-500"
+                    className="sr-only"
                   />
-                  <span className="ml-2 text-sm text-gray-700 dark:text-gray-200">
-                    古い順
-                  </span>
+                  古い順
                 </label>
-                <label className="inline-flex cursor-pointer items-center">
+                <label
+                  data-selected={value === false}
+                  className="segmented-item"
+                >
                   <input
                     type="radio"
+                    name="search-order"
                     checked={value === false}
                     onChange={() => onChange(false)}
-                    className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-2 focus:ring-indigo-500"
+                    className="sr-only"
                   />
-                  <span className="ml-2 text-sm text-gray-700 dark:text-gray-200">
-                    新しい順
-                  </span>
+                  新しい順
                 </label>
               </div>
             )}

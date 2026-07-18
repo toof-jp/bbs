@@ -6,13 +6,13 @@ export function Count({ count }: { count: CountJson | null }) {
   }
 
   return (
-    <div className="mb-2 text-sm text-gray-600 dark:text-gray-300">
+    <div className="mb-2 text-sm text-label-secondary">
       検索結果:{" "}
-      <span className="font-semibold text-gray-900 dark:text-gray-50">
+      <span className="font-semibold text-label">
         {count.total_res_count?.toLocaleString() || "0"}
       </span>
       件 (書き込みID数:{" "}
-      <span className="font-semibold text-gray-900 dark:text-gray-50">
+      <span className="font-semibold text-label">
         {count.unique_id_count?.toLocaleString() || "0"}
       </span>
       件)

@@ -96,7 +96,7 @@ export default function Search() {
   return (
     <>
       <Header />
-      <div className="min-h-screen bg-gray-50 px-4 py-8 dark:bg-gray-950">
+      <div className="min-h-screen px-4 py-10">
         <div className="max-w-7xl mx-auto">
           <h1 className="page-title">お絵描きをまとめる機械</h1>
           <div ref={formRef}>
@@ -170,8 +170,8 @@ function OekakiCard({
   const imageUrl = getImageUrl(res.oekaki_id);
 
   return (
-    <div className="card h-full rounded-none transition hover:shadow-md">
-      <div className="aspect-w-1 aspect-h-1 border-b border-gray-200 dark:border-gray-800">
+    <div className="card h-full overflow-hidden">
+      <div className="aspect-square border-b border-separator">
         <img
           src={imageUrl}
           alt={res.oekaki_title}
@@ -182,12 +182,12 @@ function OekakiCard({
         <ResMeta res={res} onIdClick={onIdClick} />
         <ResBody res={res} />
         {res.oekaki_title && (
-          <div className="mt-1 text-sm text-gray-800 dark:text-gray-100">
+          <div className="mt-1 text-sm text-label">
             タイトル: {res.oekaki_title}
           </div>
         )}
         {res.original_oekaki_res_no && (
-          <div className="mt-1 text-sm text-gray-800 dark:text-gray-100">
+          <div className="mt-1 text-sm text-label">
             <NoLink no={res.original_oekaki_res_no} /> この絵を基にしています！
           </div>
         )}
