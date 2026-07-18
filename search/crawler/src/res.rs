@@ -70,7 +70,7 @@ impl Res {
 
         let ku_dt_selector = "dt";
 
-        let ctx_name = html5ever::QualName::new(None, ns!(html), local_name!("dt"));
+        let ctx_name = markup5ever::QualName::new(None, ns!(html), local_name!("dt"));
         let ctx_attr = Vec::new();
         let ku_fragment = kuchikiki::parse_fragment(ctx_name, ctx_attr).one(html);
 
@@ -123,7 +123,7 @@ impl Res {
 
         let ku_dd_selector = "dd";
 
-        let ctx_name = html5ever::QualName::new(None, ns!(html), local_name!("dd"));
+        let ctx_name = markup5ever::QualName::new(None, ns!(html), local_name!("dd"));
         let ctx_attr = Vec::new();
         let ku_fragment = kuchikiki::parse_fragment(ctx_name, ctx_attr).one(html);
 
@@ -277,7 +277,7 @@ impl Res {
 
         let ku_a_selector = "a";
 
-        let ctx_name = html5ever::QualName::new(None, ns!(html), local_name!("a"));
+        let ctx_name = markup5ever::QualName::new(None, ns!(html), local_name!("a"));
         let ctx_attr = Vec::new();
         let ku_fragment = kuchikiki::parse_fragment(ctx_name, ctx_attr).one(html);
 
