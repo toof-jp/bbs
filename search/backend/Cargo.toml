@@ -22,7 +22,7 @@ sqlx = { version = "0.8.2", features = ["chrono", "postgres", "macros", "runtime
 thiserror = "1"
 tracing = "0.1.41"
 uuid = "1.11.0"
-garde = "0.20.0"
+garde = "0.23.0"
 redis = "0.32.0"
 anyhow = "1.0.76"
 async-trait = "0.1.83"
