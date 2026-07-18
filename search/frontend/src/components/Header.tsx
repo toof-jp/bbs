@@ -115,16 +115,34 @@ export function Header() {
             <label className="sr-only" htmlFor="theme-menu">
               テーマ
             </label>
-            <select
-              id="theme-menu"
-              value={theme}
-              onChange={(event) => setTheme(event.target.value as ThemeSetting)}
-              className="cursor-pointer rounded-full border-0 bg-fill py-1.5 pl-3 pr-8 text-[13px] font-medium text-label focus:outline-none focus:ring-2 focus:ring-accent-ring"
-            >
-              <option value="light">ライト</option>
-              <option value="dark">ダーク</option>
-              <option value="system">自動</option>
-            </select>
+            <div className="relative">
+              <select
+                id="theme-menu"
+                value={theme}
+                onChange={(event) =>
+                  setTheme(event.target.value as ThemeSetting)
+                }
+                className="cursor-pointer appearance-none rounded-full border-0 bg-fill py-1.5 pl-3.5 pr-8 text-[13px] font-medium text-label focus:outline-none focus:ring-2 focus:ring-accent-ring"
+              >
+                <option value="light">ライト</option>
+                <option value="dark">ダーク</option>
+                <option value="system">自動</option>
+              </select>
+              <svg
+                className="pointer-events-none absolute right-3 top-1/2 h-3 w-3 -translate-y-1/2 text-label-secondary"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2.5}
+                aria-hidden="true"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M8 9.5L12 5.5l4 4M8 14.5l4 4 4-4"
+                />
+              </svg>
+            </div>
           </div>
         </div>
         {isMenuOpen && (

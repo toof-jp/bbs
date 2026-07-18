@@ -10,34 +10,35 @@ export function ResMeta({
   onIdClick: (id: string) => void;
 }) {
   return (
-    <div className="mb-1.5 flex flex-wrap items-center gap-x-2.5 gap-y-1 text-xs text-label-tertiary">
+    <div className="mb-1.5 flex flex-wrap items-center gap-x-2.5 gap-y-1 text-[13px] text-label-tertiary">
       <NoLink no={res.no} />
-      <span className="text-sm font-semibold text-label">
-        {res.name_and_trip}
-      </span>
+      <span className="font-semibold text-label">{res.name_and_trip}</span>
       <span className="text-label-secondary">{res.datetime_text}</span>
-      <button
-        type="button"
-        onClick={() => onIdClick(res.id)}
-        title="このIDの投稿を検索"
-        className="pressable inline-flex cursor-pointer items-center gap-1 rounded-full bg-fill px-2 py-0.5 font-mono text-[11px] text-label-secondary hover:bg-accent-soft hover:text-accent"
-      >
-        <svg
-          className="h-3 w-3"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          strokeWidth={2}
-          aria-hidden="true"
+      <span className="inline-flex items-center gap-1.5 rounded-full bg-fill px-2 py-0.5 font-mono text-[11px] text-label-secondary">
+        <span className="select-text">ID: {res.id}</span>
+        <button
+          type="button"
+          onClick={() => onIdClick(res.id)}
+          title="このIDの投稿を検索"
+          className="pressable cursor-pointer text-label-secondary hover:text-accent"
         >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M21 21l-4.35-4.35M17 10.5a6.5 6.5 0 11-13 0 6.5 6.5 0 0113 0z"
-          />
-        </svg>
-        ID: {res.id}
-      </button>
+          <span className="sr-only">このIDの投稿を検索</span>
+          <svg
+            className="h-3 w-3"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+            aria-hidden="true"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M21 21l-4.35-4.35M17 10.5a6.5 6.5 0 11-13 0 6.5 6.5 0 0113 0z"
+            />
+          </svg>
+        </button>
+      </span>
     </div>
   );
 }
@@ -85,8 +86,7 @@ function Oekaki({ res }: { res: ResJson }) {
       <img
         src={imageUrl}
         alt={res.oekaki_title}
-        className="max-w-full rounded-2xl"
-        style={{ boxShadow: "0 0 0 0.5px var(--separator)" }}
+        className="max-w-full border border-separator"
       />
       {res.oekaki_title && (
         <div className="text-label">タイトル: {res.oekaki_title}</div>

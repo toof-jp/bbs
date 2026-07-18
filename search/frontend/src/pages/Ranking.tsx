@@ -151,14 +151,8 @@ export default function Ranking() {
                       key={item.rank}
                       className="transition-colors hover:bg-fill"
                     >
-                      <td className="px-4 py-3 whitespace-nowrap text-sm">
-                        {item.rank <= 3 ? (
-                          <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-accent-soft text-xs font-bold text-accent">
-                            {item.rank}
-                          </span>
-                        ) : (
-                          <span className="text-label">{item.rank}</span>
-                        )}
+                      <td className="px-4 py-3 whitespace-nowrap text-sm tabular-nums text-label">
+                        {item.rank}
                       </td>
                       <td className="px-4 py-3 whitespace-nowrap">
                         <button
