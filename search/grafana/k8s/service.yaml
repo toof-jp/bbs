@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: grafana
+  labels:
+    app: bbs-grafana
+spec:
+  # クラスタに Ingress がないので NodePort で公開。
+  # リバースプロキシ等で受ける場合は ClusterIP に変更する。
+  type: NodePort
+  selector:
+    app: bbs-grafana
+  ports:
+    - name: http
+      port: 3000
+      targetPort: http
+      nodePort: 30300

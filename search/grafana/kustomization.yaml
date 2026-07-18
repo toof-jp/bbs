@@ -1,0 +1,20 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: bbs-grafana
+
+resources:
+  - k8s/namespace.yaml
+  - k8s/deployment.yaml
+  - k8s/service.yaml
+
+configMapGenerator:
+  - name: grafana-datasources
+    files:
+      - provisioning/datasources/postgres.yml
+  - name: grafana-dashboard-providers
+    files:
+      - provisioning/dashboards/dashboards.yml
+  - name: grafana-dashboards
+    files:
+      - dashboards/bbs-posts.json

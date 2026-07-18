@@ -1,0 +1,199 @@
+{
+  "uid": "bbs-posts",
+  "title": "BBS 投稿量",
+  "description": "IDを指定して投稿量を確認できるダッシュボード。IDが空欄のときは全体の集計。",
+  "tags": ["bbs"],
+  "timezone": "utc",
+  "editable": true,
+  "graphTooltip": 1,
+  "schemaVersion": 39,
+  "version": 1,
+  "refresh": "",
+  "time": {
+    "from": "now-30d",
+    "to": "now"
+  },
+  "templating": {
+    "list": [
+      {
+        "type": "textbox",
+        "name": "id",
+        "label": "ID (空欄で全体)",
+        "query": "",
+        "current": {
+          "text": "",
+          "value": ""
+        },
+        "options": []
+      }
+    ]
+  },
+  "annotations": {
+    "list": []
+  },
+  "panels": [
+    {
+      "id": 1,
+      "type": "stat",
+      "title": "期間内の投稿数",
+      "gridPos": { "x": 0, "y": 0, "w": 12, "h": 5 },
+      "datasource": { "type": "postgres", "uid": "bbs-postgres" },
+      "targets": [
+        {
+          "refId": "A",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT count(*) AS \"投稿数\" FROM res WHERE $__timeFilter(datetime) AND (${id:sqlstring} = '' OR id = ${id:sqlstring})"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none",
+          "color": { "mode": "thresholds" },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [{ "color": "blue", "value": null }]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "colorMode": "value",
+        "graphMode": "none",
+        "textMode": "auto"
+      }
+    },
+    {
+      "id": 2,
+      "type": "stat",
+      "title": "期間内のユニークID数",
+      "gridPos": { "x": 12, "y": 0, "w": 12, "h": 5 },
+      "datasource": { "type": "postgres", "uid": "bbs-postgres" },
+      "targets": [
+        {
+          "refId": "A",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT count(DISTINCT id) AS \"ユニークID数\" FROM res WHERE $__timeFilter(datetime) AND id <> '' AND (${id:sqlstring} = '' OR id = ${id:sqlstring})"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none",
+          "color": { "mode": "thresholds" },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [{ "color": "green", "value": null }]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "colorMode": "value",
+        "graphMode": "none",
+        "textMode": "auto"
+      }
+    },
+    {
+      "id": 3,
+      "type": "timeseries",
+      "title": "投稿数の推移",
+      "gridPos": { "x": 0, "y": 5, "w": 24, "h": 10 },
+      "datasource": { "type": "postgres", "uid": "bbs-postgres" },
+      "interval": "1h",
+      "targets": [
+        {
+          "refId": "A",
+          "format": "time_series",
+          "rawQuery": true,
+          "rawSql": "SELECT $__timeGroup(datetime, $__interval, 0) AS time, count(*) AS \"投稿数\" FROM res WHERE $__timeFilter(datetime) AND (${id:sqlstring} = '' OR id = ${id:sqlstring}) GROUP BY 1 ORDER BY 1"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none",
+          "color": { "mode": "palette-classic" },
+          "custom": {
+            "drawStyle": "bars",
+            "fillOpacity": 60,
+            "lineWidth": 1,
+            "pointSize": 4,
+            "showPoints": "never",
+            "axisPlacement": "auto",
+            "stacking": { "mode": "none" }
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": { "displayMode": "list", "placement": "bottom", "showLegend": false },
+        "tooltip": { "mode": "single", "sort": "none" }
+      }
+    },
+    {
+      "id": 4,
+      "type": "table",
+      "title": "投稿数ランキング (Top 20)",
+      "gridPos": { "x": 0, "y": 15, "w": 12, "h": 11 },
+      "datasource": { "type": "postgres", "uid": "bbs-postgres" },
+      "targets": [
+        {
+          "refId": "A",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT id AS \"ID\", count(*) AS \"投稿数\" FROM res WHERE $__timeFilter(datetime) AND id <> '' GROUP BY id ORDER BY count(*) DESC LIMIT 20"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": { "align": "auto", "cellOptions": { "type": "auto" } }
+        },
+        "overrides": [
+          {
+            "matcher": { "id": "byName", "options": "投稿数" },
+            "properties": [
+              { "id": "custom.cellOptions", "value": { "type": "gauge", "mode": "gradient" } },
+              { "id": "color", "value": { "mode": "continuous-BlPu" } }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "showHeader": true,
+        "footer": { "show": false }
+      }
+    },
+    {
+      "id": 5,
+      "type": "barchart",
+      "title": "時間帯別の投稿数",
+      "gridPos": { "x": 12, "y": 15, "w": 12, "h": 11 },
+      "datasource": { "type": "postgres", "uid": "bbs-postgres" },
+      "targets": [
+        {
+          "refId": "A",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT extract(hour FROM datetime)::int AS \"時\", count(*) AS \"投稿数\" FROM res WHERE $__timeFilter(datetime) AND (${id:sqlstring} = '' OR id = ${id:sqlstring}) GROUP BY 1 ORDER BY 1"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none",
+          "color": { "mode": "palette-classic" },
+          "custom": { "fillOpacity": 80, "lineWidth": 0 }
+        },
+        "overrides": []
+      },
+      "options": {
+        "orientation": "auto",
+        "xField": "時",
+        "showValue": "never",
+        "legend": { "displayMode": "list", "placement": "bottom", "showLegend": false },
+        "tooltip": { "mode": "single", "sort": "none" }
+      }
+    }
+  ]
+}
