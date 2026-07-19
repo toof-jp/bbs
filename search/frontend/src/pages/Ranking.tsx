@@ -88,7 +88,7 @@ export default function Ranking() {
   return (
     <>
       <Header />
-      <div className="min-h-screen bg-gray-50 px-4 py-8 dark:bg-gray-950">
+      <div className="min-h-screen px-4 py-10">
         <div className="max-w-7xl mx-auto">
           <h1 className="page-title">IDランキング</h1>
 
@@ -101,14 +101,14 @@ export default function Ranking() {
           </div>
 
           {(totalUniqueIds > 0 || totalResCount > 0) && (
-            <div className="mb-4 text-sm text-gray-600 dark:text-gray-300">
+            <div className="mb-4 text-sm text-label-secondary">
               <p>
                 検索結果:{" "}
-                <span className="font-semibold text-gray-900 dark:text-gray-50">
+                <span className="font-semibold text-label">
                   {totalResCount?.toLocaleString() || "0"}
                 </span>
                 件 (書き込みID数:{" "}
-                <span className="font-semibold text-gray-900 dark:text-gray-50">
+                <span className="font-semibold text-label">
                   {totalUniqueIds?.toLocaleString() || "0"}
                 </span>
                 件)
@@ -116,14 +116,10 @@ export default function Ranking() {
             </div>
           )}
 
-          {error && (
-            <div className="mb-4 rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700 dark:border-red-900 dark:bg-red-950 dark:text-red-200">
-              {error}
-            </div>
-          )}
+          {error && <div className="banner-error mb-4">{error}</div>}
 
           {loading ? (
-            <div className="text-center py-8 dark:text-gray-200">
+            <div className="py-8 text-center text-label-secondary">
               <div className="spinner inline-block h-8 w-8" />
               <p className="mt-2">読み込み中...</p>
             </div>
@@ -131,40 +127,32 @@ export default function Ranking() {
             <div className="card overflow-x-auto">
               <table className="min-w-full">
                 <thead>
-                  <tr className="border-b border-gray-200 bg-gray-50 dark:border-gray-800 dark:bg-gray-800/50">
-                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider dark:text-gray-200">
+                  <tr className="border-b border-separator">
+                    <th className="px-4 py-3 text-left text-[13px] font-medium text-label-secondary">
                       順位
                     </th>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider dark:text-gray-200">
+                    <th className="px-4 py-3 text-left text-[13px] font-medium text-label-secondary">
                       ID
                     </th>
-                    <th className="px-4 py-3 text-right text-xs font-medium text-gray-700 uppercase tracking-wider dark:text-gray-200">
+                    <th className="px-4 py-3 text-right text-[13px] font-medium text-label-secondary">
                       投稿数
                     </th>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider dark:text-gray-200">
+                    <th className="px-4 py-3 text-left text-[13px] font-medium text-label-secondary">
                       最後の投稿
                     </th>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider dark:text-gray-200">
+                    <th className="px-4 py-3 text-left text-[13px] font-medium text-label-secondary">
                       最初の投稿
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-200 dark:divide-gray-800">
+                <tbody className="divide-y divide-separator">
                   {ranking.map((item) => (
                     <tr
                       key={item.rank}
-                      className="hover:bg-gray-50 transition-colors dark:hover:bg-gray-800"
+                      className="transition-colors hover:bg-fill"
                     >
-                      <td className="px-4 py-3 whitespace-nowrap text-sm">
-                        {item.rank <= 3 ? (
-                          <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-indigo-50 text-xs font-bold text-indigo-700 dark:bg-indigo-500/10 dark:text-indigo-300">
-                            {item.rank}
-                          </span>
-                        ) : (
-                          <span className="text-gray-900 dark:text-gray-100">
-                            {item.rank}
-                          </span>
-                        )}
+                      <td className="px-4 py-3 whitespace-nowrap text-sm tabular-nums text-label">
+                        {item.rank}
                       </td>
                       <td className="px-4 py-3 whitespace-nowrap">
                         <button
@@ -175,25 +163,25 @@ export default function Ranking() {
                           {item.id}
                         </button>
                       </td>
-                      <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900 text-right dark:text-gray-100">
+                      <td className="px-4 py-3 whitespace-nowrap text-right text-sm tabular-nums text-label">
                         {item.post_count?.toLocaleString() || "0"}
                       </td>
                       <td className="px-4 py-3 whitespace-nowrap">
                         <div className="text-sm">
-                          <div className="text-gray-900 dark:text-gray-100">
+                          <div className="text-label">
                             No.{item.latest_post_no}
                           </div>
-                          <div className="text-gray-500 text-xs dark:text-gray-400">
+                          <div className="text-xs text-label-tertiary">
                             {formatDateTime(item.latest_post_datetime)}
                           </div>
                         </div>
                       </td>
                       <td className="px-4 py-3 whitespace-nowrap">
                         <div className="text-sm">
-                          <div className="text-gray-900 dark:text-gray-100">
+                          <div className="text-label">
                             No.{item.first_post_no}
                           </div>
-                          <div className="text-gray-500 text-xs dark:text-gray-400">
+                          <div className="text-xs text-label-tertiary">
                             {formatDateTime(item.first_post_datetime)}
                           </div>
                         </div>
@@ -205,7 +193,7 @@ export default function Ranking() {
             </div>
           ) : (
             !loading && (
-              <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+              <div className="py-8 text-center text-label-tertiary">
                 ランキングデータがありません
               </div>
             )

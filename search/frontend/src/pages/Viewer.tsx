@@ -335,10 +335,13 @@ export default function Viewer() {
   return (
     <>
       <Header />
-      <div className="min-h-screen bg-gray-50 px-4 py-8 dark:bg-gray-950">
+      <div className="min-h-screen px-4 py-10">
         <div className="max-w-4xl mx-auto">
           <h1 className="page-title">掲示板ビュワー</h1>
-          <div className="card sticky top-16 z-30 mb-4 bg-white/95 p-4 backdrop-blur dark:bg-gray-900/95">
+          <div
+            className="material-chrome sticky top-[60px] z-30 mb-4 rounded-2xl p-4"
+            style={{ boxShadow: "0 0 0 0.5px var(--separator)" }}
+          >
             <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
               <form
                 onSubmit={handleNoSubmit}
@@ -346,7 +349,7 @@ export default function Viewer() {
               >
                 <label
                   htmlFor="jump-no"
-                  className="shrink-0 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300"
+                  className="shrink-0 whitespace-nowrap text-[13px] font-medium text-label-secondary"
                 >
                   レス番号
                 </label>
@@ -373,7 +376,7 @@ export default function Viewer() {
               >
                 <label
                   htmlFor="jump-datetime"
-                  className="shrink-0 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300"
+                  className="shrink-0 whitespace-nowrap text-[13px] font-medium text-label-secondary"
                 >
                   日時
                 </label>
@@ -403,9 +406,7 @@ export default function Viewer() {
             </div>
           </div>
           {notice && (
-            <div className="mb-4 rounded-lg border border-yellow-200 bg-yellow-50 px-4 py-3 text-sm text-yellow-800 dark:border-yellow-900 dark:bg-yellow-900/30 dark:text-yellow-200">
-              {notice}
-            </div>
+            <div className="banner-notice mb-4">{notice}</div>
           )}
           {isJumping
             ? spinner
@@ -415,7 +416,7 @@ export default function Viewer() {
                   {hasMoreUp ? (
                     spinner
                   ) : (
-                    <div className="pb-2 text-center text-sm text-gray-500 dark:text-gray-400">
+                    <div className="pb-2 text-center text-sm text-label-tertiary">
                       これより前のレスはありません
                     </div>
                   )}
@@ -424,7 +425,7 @@ export default function Viewer() {
                     hasMore={hasMoreDown}
                     loader={spinner}
                   >
-                    <ul className="divide-y divide-gray-200 dark:divide-gray-800">
+                    <ul className="divide-y divide-separator">
                       {result.map((res) => (
                         <Res
                           key={res.no}

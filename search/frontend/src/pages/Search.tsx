@@ -95,7 +95,7 @@ export default function Search() {
   return (
     <>
       <Header />
-      <div className="min-h-screen bg-gray-50 px-4 py-8 dark:bg-gray-950">
+      <div className="min-h-screen px-4 py-10">
         <div className="max-w-4xl mx-auto">
           <h1 className="page-title">掲示板検索</h1>
           <div ref={formRef}>
@@ -148,7 +148,7 @@ function Result({
         loader={loader}
         className="space-y-4"
       >
-        <ul className="divide-y divide-gray-200 dark:divide-gray-800">
+        <ul className="divide-y divide-separator">
           {result.map((res: ResJson) => (
             <Res key={res.no} res={res} onIdClick={onIdClick} />
           ))}
