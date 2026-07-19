@@ -170,8 +170,8 @@ function OekakiCard({
   const imageUrl = getImageUrl(res.oekaki_id);
 
   return (
-    <div className="card h-full overflow-hidden">
-      <div className="aspect-square border-b border-separator">
+    <div className="h-full bg-surface">
+      <div className="aspect-square">
         <img
           src={imageUrl}
           alt={res.oekaki_title}
